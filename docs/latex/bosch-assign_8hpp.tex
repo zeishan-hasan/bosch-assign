@@ -1,0 +1,150 @@
+\hypertarget{bosch-assign_8hpp}{}\doxysection{/home/zeishan/\+Documents/jun-\/19-\/bosch/bosch-\/assign/bosch-\/assign.hpp File Reference}
+\label{bosch-assign_8hpp}\index{/home/zeishan/Documents/jun-\/19-\/bosch/bosch-\/assign/bosch-\/assign.hpp@{/home/zeishan/Documents/jun-\/19-\/bosch/bosch-\/assign/bosch-\/assign.hpp}}
+{\ttfamily \#include $<$iostream$>$}\newline
+{\ttfamily \#include $<$queue$>$}\newline
+{\ttfamily \#include $<$pthread.\+h$>$}\newline
+Include dependency graph for bosch-\/assign.hpp\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=287pt]{bosch-assign_8hpp__incl}
+\end{center}
+\end{figure}
+This graph shows which files directly or indirectly include this file\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{bosch-assign_8hpp__dep__incl}
+\end{center}
+\end{figure}
+\doxysubsection*{Classes}
+\begin{DoxyCompactItemize}
+\item 
+class \mbox{\hyperlink{classQueue}{Queue$<$ T $>$}}
+\begin{DoxyCompactList}\small\item\em A thread-\/safe queue implementation. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsection*{Macros}
+\begin{DoxyCompactItemize}
+\item 
+\#define \mbox{\hyperlink{bosch-assign_8hpp_a799517031a8334a42807b119bb456c53}{T\+I\+M\+E\+\_\+\+O\+UT}}~110
+\end{DoxyCompactItemize}
+\doxysubsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+void $\ast$ \mbox{\hyperlink{bosch-assign_8hpp_a35c056ce555ff51abe0ca3d8fb7e4bab}{writer}} (void $\ast$arg)
+\begin{DoxyCompactList}\small\item\em Writer thread function. \end{DoxyCompactList}\item 
+void $\ast$ \mbox{\hyperlink{bosch-assign_8hpp_a9901212efa6943de07eee8a84bb97a61}{reader}} (void $\ast$arg)
+\begin{DoxyCompactList}\small\item\em Reader thread function. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsection*{Variables}
+\begin{DoxyCompactItemize}
+\item 
+static int \mbox{\hyperlink{bosch-assign_8hpp_a2cac1cf601aa4d78b56b0acc6918da87}{w\+\_\+ret}} = 0
+\item 
+static int \mbox{\hyperlink{bosch-assign_8hpp_ab0bfdf0bc5aec3cf3a221da246abe9b7}{r\+\_\+ret}} = 0
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Macro Definition Documentation}
+\mbox{\Hypertarget{bosch-assign_8hpp_a799517031a8334a42807b119bb456c53}\label{bosch-assign_8hpp_a799517031a8334a42807b119bb456c53}} 
+\index{bosch-\/assign.hpp@{bosch-\/assign.hpp}!TIME\_OUT@{TIME\_OUT}}
+\index{TIME\_OUT@{TIME\_OUT}!bosch-\/assign.hpp@{bosch-\/assign.hpp}}
+\doxysubsubsection{\texorpdfstring{TIME\_OUT}{TIME\_OUT}}
+{\footnotesize\ttfamily \#define T\+I\+M\+E\+\_\+\+O\+UT~110}
+
+
+
+\doxysubsection{Function Documentation}
+\mbox{\Hypertarget{bosch-assign_8hpp_a9901212efa6943de07eee8a84bb97a61}\label{bosch-assign_8hpp_a9901212efa6943de07eee8a84bb97a61}} 
+\index{bosch-\/assign.hpp@{bosch-\/assign.hpp}!reader@{reader}}
+\index{reader@{reader}!bosch-\/assign.hpp@{bosch-\/assign.hpp}}
+\doxysubsubsection{\texorpdfstring{reader()}{reader()}}
+{\footnotesize\ttfamily void$\ast$ reader (\begin{DoxyParamCaption}\item[{void $\ast$}]{arg }\end{DoxyParamCaption})}
+
+
+
+Reader thread function. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em arg} & A pointer to the \mbox{\hyperlink{classQueue}{Queue}} object. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+void$\ast$ The return value of the thread. 
+\end{DoxyReturn}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{204                         \{}
+\DoxyCodeLine{205     \textcolor{keywordflow}{if} (arg == NULL) \{}
+\DoxyCodeLine{206         \textcolor{keywordflow}{return} \textcolor{keyword}{nullptr};}
+\DoxyCodeLine{207     \}}
+\DoxyCodeLine{208 }
+\DoxyCodeLine{209     \mbox{\hyperlink{classQueue}{Queue<int>}} *my\_queue = \textcolor{keyword}{static\_cast<}\mbox{\hyperlink{classQueue}{Queue<int>}}*\textcolor{keyword}{>}(arg);}
+\DoxyCodeLine{210     \textcolor{keywordflow}{while}(\textcolor{keyword}{true}) \{}
+\DoxyCodeLine{211         std::cout << my\_queue-\/>\mbox{\hyperlink{classQueue_abeee018138cbb5226e5352a5788e23bd}{pop}}() << std::endl;}
+\DoxyCodeLine{212         \textcolor{keywordflow}{if} (my\_queue-\/>\mbox{\hyperlink{classQueue_a22e0b575ea62157eaf947b6845d0b560}{get\_is\_done}}()) \{}
+\DoxyCodeLine{213             std::cout << \textcolor{stringliteral}{"reader: queue count is "} << my\_queue-\/>\mbox{\hyperlink{classQueue_ad2779bcb60e23b597662c393bf04271c}{count}}() << std::endl;}
+\DoxyCodeLine{214             \textcolor{keywordflow}{if} (my\_queue-\/>\mbox{\hyperlink{classQueue_ad2779bcb60e23b597662c393bf04271c}{count}}() == 0) \{}
+\DoxyCodeLine{215                 \mbox{\hyperlink{bosch-assign_8hpp_ab0bfdf0bc5aec3cf3a221da246abe9b7}{r\_ret}} = 200;}
+\DoxyCodeLine{216                 pthread\_exit(\&\mbox{\hyperlink{bosch-assign_8hpp_ab0bfdf0bc5aec3cf3a221da246abe9b7}{r\_ret}});}
+\DoxyCodeLine{217             \}}
+\DoxyCodeLine{218         \}}
+\DoxyCodeLine{219     \}}
+\DoxyCodeLine{220 \}}
+
+\end{DoxyCode}
+\mbox{\Hypertarget{bosch-assign_8hpp_a35c056ce555ff51abe0ca3d8fb7e4bab}\label{bosch-assign_8hpp_a35c056ce555ff51abe0ca3d8fb7e4bab}} 
+\index{bosch-\/assign.hpp@{bosch-\/assign.hpp}!writer@{writer}}
+\index{writer@{writer}!bosch-\/assign.hpp@{bosch-\/assign.hpp}}
+\doxysubsubsection{\texorpdfstring{writer()}{writer()}}
+{\footnotesize\ttfamily void$\ast$ writer (\begin{DoxyParamCaption}\item[{void $\ast$}]{arg }\end{DoxyParamCaption})}
+
+
+
+Writer thread function. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em arg} & A pointer to the \mbox{\hyperlink{classQueue}{Queue}} object. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+void$\ast$ The return value of the thread. 
+\end{DoxyReturn}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{180                         \{}
+\DoxyCodeLine{181     \textcolor{keywordflow}{if} (arg == NULL) \{}
+\DoxyCodeLine{182         \textcolor{keywordflow}{return} \textcolor{keyword}{nullptr};}
+\DoxyCodeLine{183     \}}
+\DoxyCodeLine{184 }
+\DoxyCodeLine{185     \mbox{\hyperlink{classQueue}{Queue<int>}} *my\_queue = \textcolor{keyword}{static\_cast<}\mbox{\hyperlink{classQueue}{Queue<int>}}*\textcolor{keyword}{>}(arg);}
+\DoxyCodeLine{186     \textcolor{keywordtype}{int} count = 0;}
+\DoxyCodeLine{187     \textcolor{keywordflow}{while}(\textcolor{keyword}{true}) \{}
+\DoxyCodeLine{188         count++;}
+\DoxyCodeLine{189         std::cout << \textcolor{stringliteral}{"writer: queue count is "} << my\_queue-\/>\mbox{\hyperlink{classQueue_ad2779bcb60e23b597662c393bf04271c}{count}}() << std::endl;}
+\DoxyCodeLine{190         my\_queue-\/>\mbox{\hyperlink{classQueue_a052d7e333791e8efcdf18fa5e504bc92}{push}}(count);}
+\DoxyCodeLine{191         \textcolor{keywordflow}{if} (count >= 10) \{}
+\DoxyCodeLine{192             \mbox{\hyperlink{bosch-assign_8hpp_a2cac1cf601aa4d78b56b0acc6918da87}{w\_ret}} = 100;}
+\DoxyCodeLine{193             pthread\_exit(\&\mbox{\hyperlink{bosch-assign_8hpp_a2cac1cf601aa4d78b56b0acc6918da87}{w\_ret}});}
+\DoxyCodeLine{194         \}}
+\DoxyCodeLine{195     \}}
+\DoxyCodeLine{196 \}}
+
+\end{DoxyCode}
+
+
+\doxysubsection{Variable Documentation}
+\mbox{\Hypertarget{bosch-assign_8hpp_ab0bfdf0bc5aec3cf3a221da246abe9b7}\label{bosch-assign_8hpp_ab0bfdf0bc5aec3cf3a221da246abe9b7}} 
+\index{bosch-\/assign.hpp@{bosch-\/assign.hpp}!r\_ret@{r\_ret}}
+\index{r\_ret@{r\_ret}!bosch-\/assign.hpp@{bosch-\/assign.hpp}}
+\doxysubsubsection{\texorpdfstring{r\_ret}{r\_ret}}
+{\footnotesize\ttfamily int r\+\_\+ret = 0\hspace{0.3cm}{\ttfamily [static]}}
+
+\mbox{\Hypertarget{bosch-assign_8hpp_a2cac1cf601aa4d78b56b0acc6918da87}\label{bosch-assign_8hpp_a2cac1cf601aa4d78b56b0acc6918da87}} 
+\index{bosch-\/assign.hpp@{bosch-\/assign.hpp}!w\_ret@{w\_ret}}
+\index{w\_ret@{w\_ret}!bosch-\/assign.hpp@{bosch-\/assign.hpp}}
+\doxysubsubsection{\texorpdfstring{w\_ret}{w\_ret}}
+{\footnotesize\ttfamily int w\+\_\+ret = 0\hspace{0.3cm}{\ttfamily [static]}}
+

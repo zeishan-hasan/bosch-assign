@@ -1,0 +1,64 @@
+\hypertarget{bosch-assign_8cpp}{}\doxysection{/home/zeishan/\+Documents/jun-\/19-\/bosch/bosch-\/assign/bosch-\/assign.cpp File Reference}
+\label{bosch-assign_8cpp}\index{/home/zeishan/Documents/jun-\/19-\/bosch/bosch-\/assign/bosch-\/assign.cpp@{/home/zeishan/Documents/jun-\/19-\/bosch/bosch-\/assign/bosch-\/assign.cpp}}
+{\ttfamily \#include \char`\"{}bosch-\/assign.\+hpp\char`\"{}}\newline
+Include dependency graph for bosch-\/assign.cpp\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=287pt]{bosch-assign_8cpp__incl}
+\end{center}
+\end{figure}
+\doxysubsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+int \mbox{\hyperlink{bosch-assign_8cpp_ae66f6b31b5ad750f1fe042a706a4e3d4}{main}} ()
+\begin{DoxyCompactList}\small\item\em The main function. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Function Documentation}
+\mbox{\Hypertarget{bosch-assign_8cpp_ae66f6b31b5ad750f1fe042a706a4e3d4}\label{bosch-assign_8cpp_ae66f6b31b5ad750f1fe042a706a4e3d4}} 
+\index{bosch-\/assign.cpp@{bosch-\/assign.cpp}!main@{main}}
+\index{main@{main}!bosch-\/assign.cpp@{bosch-\/assign.cpp}}
+\doxysubsubsection{\texorpdfstring{main()}{main()}}
+{\footnotesize\ttfamily int main (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+
+
+The main function. 
+
+This function demonstrates the usage of the \mbox{\hyperlink{classQueue}{Queue}} class by creating two threads\+: one writer thread and one reader thread. The writer thread pushes integers into the queue, while the reader thread pops integers from the queue. The main function waits for the threads to complete, retrieves their return values, and outputs them.
+
+\begin{DoxyReturn}{Returns}
+0 on successful execution. 
+\end{DoxyReturn}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{13            \{}
+\DoxyCodeLine{14     \mbox{\hyperlink{classQueue}{Queue<int>}} *q = \textcolor{keyword}{new} \mbox{\hyperlink{classQueue}{Queue<int>}}(2);}
+\DoxyCodeLine{15     std::cout << \textcolor{stringliteral}{"queue capacity: "} << q-\/>\mbox{\hyperlink{classQueue_a0984ba1a6d1e8de2275d7b5f89bb12fa}{queue\_size}}() << std::endl;}
+\DoxyCodeLine{16     pthread\_t threads[2];}
+\DoxyCodeLine{17     \textcolor{keywordtype}{int} check = 0;}
+\DoxyCodeLine{18     \textcolor{keywordtype}{int} *ptr[2];}
+\DoxyCodeLine{19 }
+\DoxyCodeLine{20     check = pthread\_create(\&threads[0], NULL, \mbox{\hyperlink{bosch-assign_8hpp_a35c056ce555ff51abe0ca3d8fb7e4bab}{writer}}, (\textcolor{keywordtype}{void}*)q);}
+\DoxyCodeLine{21     \textcolor{keywordflow}{if} (check) \{}
+\DoxyCodeLine{22         fprintf(stderr, \textcolor{stringliteral}{"unable to create the thread\(\backslash\)n"});}
+\DoxyCodeLine{23     \}}
+\DoxyCodeLine{24 }
+\DoxyCodeLine{25     check = pthread\_create(\&threads[1], NULL, \mbox{\hyperlink{bosch-assign_8hpp_a9901212efa6943de07eee8a84bb97a61}{reader}}, (\textcolor{keywordtype}{void}*)q);}
+\DoxyCodeLine{26     \textcolor{keywordflow}{if} (check) \{}
+\DoxyCodeLine{27         fprintf(stderr, \textcolor{stringliteral}{"unable to create the thread\(\backslash\)n"});}
+\DoxyCodeLine{28     \}}
+\DoxyCodeLine{29 }
+\DoxyCodeLine{30     pthread\_join(threads[0], (\textcolor{keywordtype}{void}**)\&(ptr[0]));}
+\DoxyCodeLine{31     pthread\_join(threads[1], (\textcolor{keywordtype}{void}**)\&(ptr[1]));}
+\DoxyCodeLine{32 }
+\DoxyCodeLine{33     std::cout << \textcolor{stringliteral}{"writer thread returned: "} << *ptr[0] << std::endl;}
+\DoxyCodeLine{34     std::cout << \textcolor{stringliteral}{"reader thread returned: "} << *ptr[1] << std::endl;}
+\DoxyCodeLine{35     \textcolor{keyword}{delete} q;}
+\DoxyCodeLine{36 }
+\DoxyCodeLine{37     \textcolor{keywordflow}{return} 0;}
+\DoxyCodeLine{38 \}}
+
+\end{DoxyCode}

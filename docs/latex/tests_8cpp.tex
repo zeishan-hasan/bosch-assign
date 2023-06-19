@@ -1,0 +1,137 @@
+\hypertarget{tests_8cpp}{}\doxysection{/home/zeishan/\+Documents/jun-\/19-\/bosch/bosch-\/assign/test/tests.cpp File Reference}
+\label{tests_8cpp}\index{/home/zeishan/Documents/jun-\/19-\/bosch/bosch-\/assign/test/tests.cpp@{/home/zeishan/Documents/jun-\/19-\/bosch/bosch-\/assign/test/tests.cpp}}
+{\ttfamily \#include $<$gtest/gtest.\+h$>$}\newline
+{\ttfamily \#include $<$pthread.\+h$>$}\newline
+{\ttfamily \#include \char`\"{}../bosch-\/assign.\+hpp\char`\"{}}\newline
+Include dependency graph for tests.\+cpp\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{tests_8cpp__incl}
+\end{center}
+\end{figure}
+\doxysubsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{tests_8cpp_a482a60f499f3b1a348760f02d359ca41}{T\+E\+ST}} (Queue\+Test, Read\+And\+Write)
+\item 
+\mbox{\hyperlink{tests_8cpp_a472581d8474ccbb80a1c2b5c0f4a0fb2}{T\+E\+ST}} (Queue\+Test, Push\+And\+Pop)
+\item 
+\mbox{\hyperlink{tests_8cpp_ab47130969bda07aafee59846d5115c86}{T\+E\+ST}} (Queue\+Test, Is\+Done\+Flag\+After\+Processing)
+\item 
+int \mbox{\hyperlink{tests_8cpp_a3c04138a5bfe5d72780bb7e82a18e627}{main}} (int argc, char $\ast$$\ast$argv)
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Function Documentation}
+\mbox{\Hypertarget{tests_8cpp_a3c04138a5bfe5d72780bb7e82a18e627}\label{tests_8cpp_a3c04138a5bfe5d72780bb7e82a18e627}} 
+\index{tests.cpp@{tests.cpp}!main@{main}}
+\index{main@{main}!tests.cpp@{tests.cpp}}
+\doxysubsubsection{\texorpdfstring{main()}{main()}}
+{\footnotesize\ttfamily int main (\begin{DoxyParamCaption}\item[{int}]{argc,  }\item[{char $\ast$$\ast$}]{argv }\end{DoxyParamCaption})}
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{110                                 \{}
+\DoxyCodeLine{111     ::testing::InitGoogleTest(\&argc, argv);}
+\DoxyCodeLine{112     \textcolor{keywordflow}{return} RUN\_ALL\_TESTS();}
+\DoxyCodeLine{113 \}}
+
+\end{DoxyCode}
+\mbox{\Hypertarget{tests_8cpp_ab47130969bda07aafee59846d5115c86}\label{tests_8cpp_ab47130969bda07aafee59846d5115c86}} 
+\index{tests.cpp@{tests.cpp}!TEST@{TEST}}
+\index{TEST@{TEST}!tests.cpp@{tests.cpp}}
+\doxysubsubsection{\texorpdfstring{TEST()}{TEST()}\hspace{0.1cm}{\footnotesize\ttfamily [1/3]}}
+{\footnotesize\ttfamily T\+E\+ST (\begin{DoxyParamCaption}\item[{Queue\+Test}]{,  }\item[{Is\+Done\+Flag\+After\+Processing}]{ }\end{DoxyParamCaption})}
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{58                                            \{}
+\DoxyCodeLine{59     \mbox{\hyperlink{classQueue}{Queue<int>}} queue(5);}
+\DoxyCodeLine{60     \textcolor{comment}{// Create writer thread}}
+\DoxyCodeLine{61     pthread\_t writerThread;}
+\DoxyCodeLine{62     pthread\_create(\&writerThread, NULL, \mbox{\hyperlink{bosch-assign_8hpp_a35c056ce555ff51abe0ca3d8fb7e4bab}{writer}}, \&queue);}
+\DoxyCodeLine{63 }
+\DoxyCodeLine{64     \textcolor{comment}{// Create reader thread}}
+\DoxyCodeLine{65     pthread\_t readerThread;}
+\DoxyCodeLine{66     pthread\_create(\&readerThread, NULL, \mbox{\hyperlink{bosch-assign_8hpp_a9901212efa6943de07eee8a84bb97a61}{reader}}, \&queue);}
+\DoxyCodeLine{67 }
+\DoxyCodeLine{68     \textcolor{comment}{// Wait for the threads to finish}}
+\DoxyCodeLine{69     \textcolor{keywordtype}{void}* w\_retval;}
+\DoxyCodeLine{70     \textcolor{keywordtype}{void}* r\_retval;}
+\DoxyCodeLine{71     pthread\_join(writerThread, \&w\_retval);}
+\DoxyCodeLine{72     pthread\_join(readerThread, \&r\_retval);}
+\DoxyCodeLine{73 }
+\DoxyCodeLine{74     \textcolor{comment}{// Check the is\_done flag for producer done}}
+\DoxyCodeLine{75     ASSERT\_EQ(queue.get\_is\_done(), 1);}
+\DoxyCodeLine{76 \}}
+
+\end{DoxyCode}
+\mbox{\Hypertarget{tests_8cpp_a472581d8474ccbb80a1c2b5c0f4a0fb2}\label{tests_8cpp_a472581d8474ccbb80a1c2b5c0f4a0fb2}} 
+\index{tests.cpp@{tests.cpp}!TEST@{TEST}}
+\index{TEST@{TEST}!tests.cpp@{tests.cpp}}
+\doxysubsubsection{\texorpdfstring{TEST()}{TEST()}\hspace{0.1cm}{\footnotesize\ttfamily [2/3]}}
+{\footnotesize\ttfamily T\+E\+ST (\begin{DoxyParamCaption}\item[{Queue\+Test}]{,  }\item[{Push\+And\+Pop}]{ }\end{DoxyParamCaption})}
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{35                             \{}
+\DoxyCodeLine{36     \textcolor{comment}{// Create a queue with a capacity of 5}}
+\DoxyCodeLine{37     \mbox{\hyperlink{classQueue}{Queue<int>}} queue(5);}
+\DoxyCodeLine{38 }
+\DoxyCodeLine{39     \textcolor{comment}{// Push five elements into the queue}}
+\DoxyCodeLine{40     queue.push(10);}
+\DoxyCodeLine{41     queue.push(20);}
+\DoxyCodeLine{42     queue.push(30);}
+\DoxyCodeLine{43     queue.push(40);}
+\DoxyCodeLine{44     queue.push(50);}
+\DoxyCodeLine{45 }
+\DoxyCodeLine{46     \textcolor{comment}{// Pop the elements and verify their order}}
+\DoxyCodeLine{47     EXPECT\_EQ(10, queue.pop());}
+\DoxyCodeLine{48     EXPECT\_EQ(20, queue.pop());}
+\DoxyCodeLine{49     EXPECT\_EQ(30, queue.pop());}
+\DoxyCodeLine{50     EXPECT\_EQ(40, queue.pop());}
+\DoxyCodeLine{51     EXPECT\_EQ(50, queue.pop());}
+\DoxyCodeLine{52 }
+\DoxyCodeLine{53     \textcolor{comment}{// After popping all elements, the queue should be empty}}
+\DoxyCodeLine{54     EXPECT\_EQ(0, queue.count());}
+\DoxyCodeLine{55 \}}
+
+\end{DoxyCode}
+\mbox{\Hypertarget{tests_8cpp_a482a60f499f3b1a348760f02d359ca41}\label{tests_8cpp_a482a60f499f3b1a348760f02d359ca41}} 
+\index{tests.cpp@{tests.cpp}!TEST@{TEST}}
+\index{TEST@{TEST}!tests.cpp@{tests.cpp}}
+\doxysubsubsection{\texorpdfstring{TEST()}{TEST()}\hspace{0.1cm}{\footnotesize\ttfamily [3/3]}}
+{\footnotesize\ttfamily T\+E\+ST (\begin{DoxyParamCaption}\item[{Queue\+Test}]{,  }\item[{Read\+And\+Write}]{ }\end{DoxyParamCaption})}
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{6                               \{}
+\DoxyCodeLine{7     \textcolor{comment}{// Create a queue with a capacity of 5}}
+\DoxyCodeLine{8     \mbox{\hyperlink{classQueue}{Queue<int>}} myQueue(5);}
+\DoxyCodeLine{9 }
+\DoxyCodeLine{10     \textcolor{comment}{// Create writer thread}}
+\DoxyCodeLine{11     pthread\_t writerThread;}
+\DoxyCodeLine{12     pthread\_create(\&writerThread, NULL, \mbox{\hyperlink{bosch-assign_8hpp_a35c056ce555ff51abe0ca3d8fb7e4bab}{writer}}, \&myQueue);}
+\DoxyCodeLine{13 }
+\DoxyCodeLine{14     \textcolor{comment}{// Create reader thread}}
+\DoxyCodeLine{15     pthread\_t readerThread;}
+\DoxyCodeLine{16     pthread\_create(\&readerThread, NULL, \mbox{\hyperlink{bosch-assign_8hpp_a9901212efa6943de07eee8a84bb97a61}{reader}}, \&myQueue);}
+\DoxyCodeLine{17 }
+\DoxyCodeLine{18     \textcolor{comment}{// Wait for writer thread to finish}}
+\DoxyCodeLine{19     \textcolor{keywordtype}{void}* w\_ret\_val;}
+\DoxyCodeLine{20     pthread\_join(writerThread, \&w\_ret\_val);}
+\DoxyCodeLine{21 }
+\DoxyCodeLine{22     \textcolor{comment}{// Wait for reader thread to finish}}
+\DoxyCodeLine{23     \textcolor{keywordtype}{void}* r\_ret\_val;}
+\DoxyCodeLine{24     pthread\_join(readerThread, \&r\_ret\_val);}
+\DoxyCodeLine{25 }
+\DoxyCodeLine{26     \textcolor{comment}{// Verify the return values of the threads}}
+\DoxyCodeLine{27     \textcolor{keywordtype}{int} \mbox{\hyperlink{bosch-assign_8hpp_a2cac1cf601aa4d78b56b0acc6918da87}{w\_ret}} = *(\textcolor{keyword}{static\_cast<}\textcolor{keywordtype}{int}*\textcolor{keyword}{>}(w\_ret\_val));}
+\DoxyCodeLine{28     \textcolor{keywordtype}{int} \mbox{\hyperlink{bosch-assign_8hpp_ab0bfdf0bc5aec3cf3a221da246abe9b7}{r\_ret}} = *(\textcolor{keyword}{static\_cast<}\textcolor{keywordtype}{int}*\textcolor{keyword}{>}(r\_ret\_val));}
+\DoxyCodeLine{29     EXPECT\_EQ(100, \mbox{\hyperlink{bosch-assign_8hpp_a2cac1cf601aa4d78b56b0acc6918da87}{w\_ret}});}
+\DoxyCodeLine{30     EXPECT\_EQ(200, \mbox{\hyperlink{bosch-assign_8hpp_ab0bfdf0bc5aec3cf3a221da246abe9b7}{r\_ret}});}
+\DoxyCodeLine{31 \}}
+
+\end{DoxyCode}

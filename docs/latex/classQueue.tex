@@ -1,0 +1,300 @@
+\hypertarget{classQueue}{}\doxysection{Queue$<$ T $>$ Class Template Reference}
+\label{classQueue}\index{Queue$<$ T $>$@{Queue$<$ T $>$}}
+
+
+A thread-\/safe queue implementation.  
+
+
+
+
+{\ttfamily \#include $<$bosch-\/assign.\+hpp$>$}
+
+\doxysubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{classQueue_a66872b8cc7fc722d02c14bb5816ab2c2}{Queue}} (int n)
+\begin{DoxyCompactList}\small\item\em Constructs a new \mbox{\hyperlink{classQueue}{Queue}} object. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{classQueue_aa7eef1b427e24555780505de20e9acbc}{$\sim$\+Queue}} ()
+\begin{DoxyCompactList}\small\item\em Destroys the \mbox{\hyperlink{classQueue}{Queue}} object. \end{DoxyCompactList}\item 
+int \mbox{\hyperlink{classQueue_ad2779bcb60e23b597662c393bf04271c}{count}} ()
+\begin{DoxyCompactList}\small\item\em Gets the number of elements in the queue. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classQueue_a03312b60344e10adc76501434b2852f6}{set\+\_\+is\+\_\+done}} ()
+\begin{DoxyCompactList}\small\item\em Sets the \char`\"{}is\+\_\+done\char`\"{} flag to indicate the producer is done. \end{DoxyCompactList}\item 
+int \mbox{\hyperlink{classQueue_a22e0b575ea62157eaf947b6845d0b560}{get\+\_\+is\+\_\+done}} ()
+\begin{DoxyCompactList}\small\item\em Gets the value of the \char`\"{}is\+\_\+done\char`\"{} flag. \end{DoxyCompactList}\item 
+int \mbox{\hyperlink{classQueue_a0984ba1a6d1e8de2275d7b5f89bb12fa}{queue\+\_\+size}} ()
+\begin{DoxyCompactList}\small\item\em Gets the maximum capacity of the queue. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classQueue_a052d7e333791e8efcdf18fa5e504bc92}{push}} (T element)
+\begin{DoxyCompactList}\small\item\em Pushes an element into the queue. \end{DoxyCompactList}\item 
+T \mbox{\hyperlink{classQueue_abeee018138cbb5226e5352a5788e23bd}{pop}} ()
+\begin{DoxyCompactList}\small\item\em Pops an element from the queue. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+\subsubsection*{template$<$typename T$>$\newline
+class Queue$<$ T $>$}
+
+A thread-\/safe queue implementation. 
+
+
+\begin{DoxyTemplParams}{Template Parameters}
+{\em T} & The type of elements stored in the queue. \\
+\hline
+\end{DoxyTemplParams}
+
+
+\doxysubsection{Constructor \& Destructor Documentation}
+\mbox{\Hypertarget{classQueue_a66872b8cc7fc722d02c14bb5816ab2c2}\label{classQueue_a66872b8cc7fc722d02c14bb5816ab2c2}} 
+\index{Queue$<$ T $>$@{Queue$<$ T $>$}!Queue@{Queue}}
+\index{Queue@{Queue}!Queue$<$ T $>$@{Queue$<$ T $>$}}
+\doxysubsubsection{\texorpdfstring{Queue()}{Queue()}}
+{\footnotesize\ttfamily template$<$typename T $>$ \\
+\mbox{\hyperlink{classQueue}{Queue}}$<$ T $>$\+::\mbox{\hyperlink{classQueue}{Queue}} (\begin{DoxyParamCaption}\item[{int}]{n }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Constructs a new \mbox{\hyperlink{classQueue}{Queue}} object. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em n} & The maximum capacity of the queue. \\
+\hline
+\end{DoxyParams}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{29                      \{}
+\DoxyCodeLine{30             this-\/>queue\_capacity = n;}
+\DoxyCodeLine{31             \textcolor{keywordflow}{if} (pthread\_mutex\_init(\&mutex\_lock, NULL)) \{}
+\DoxyCodeLine{32                 fprintf(stderr, \textcolor{stringliteral}{"Unable to initialize the mutex\(\backslash\)n"});}
+\DoxyCodeLine{33             \}}
+\DoxyCodeLine{34         \}}
+
+\end{DoxyCode}
+\mbox{\Hypertarget{classQueue_aa7eef1b427e24555780505de20e9acbc}\label{classQueue_aa7eef1b427e24555780505de20e9acbc}} 
+\index{Queue$<$ T $>$@{Queue$<$ T $>$}!````~Queue@{$\sim$Queue}}
+\index{````~Queue@{$\sim$Queue}!Queue$<$ T $>$@{Queue$<$ T $>$}}
+\doxysubsubsection{\texorpdfstring{$\sim$Queue()}{~Queue()}}
+{\footnotesize\ttfamily template$<$typename T $>$ \\
+\mbox{\hyperlink{classQueue}{Queue}}$<$ T $>$\+::$\sim$\mbox{\hyperlink{classQueue}{Queue}} (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Destroys the \mbox{\hyperlink{classQueue}{Queue}} object. 
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{39                  \{}
+\DoxyCodeLine{40             pthread\_mutex\_destroy(\&mutex\_lock);}
+\DoxyCodeLine{41             pthread\_cond\_destroy(\&cond\_read);}
+\DoxyCodeLine{42             pthread\_cond\_destroy(\&cond\_write);}
+\DoxyCodeLine{43         \}}
+
+\end{DoxyCode}
+
+
+\doxysubsection{Member Function Documentation}
+\mbox{\Hypertarget{classQueue_ad2779bcb60e23b597662c393bf04271c}\label{classQueue_ad2779bcb60e23b597662c393bf04271c}} 
+\index{Queue$<$ T $>$@{Queue$<$ T $>$}!count@{count}}
+\index{count@{count}!Queue$<$ T $>$@{Queue$<$ T $>$}}
+\doxysubsubsection{\texorpdfstring{count()}{count()}}
+{\footnotesize\ttfamily template$<$typename T $>$ \\
+int \mbox{\hyperlink{classQueue}{Queue}}$<$ T $>$\+::count (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Gets the number of elements in the queue. 
+
+\begin{DoxyReturn}{Returns}
+The number of elements in the queue. 
+\end{DoxyReturn}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{50                     \{}
+\DoxyCodeLine{51             \textcolor{keywordflow}{return} this-\/>m\_queue.size();}
+\DoxyCodeLine{52         \}}
+
+\end{DoxyCode}
+\mbox{\Hypertarget{classQueue_a22e0b575ea62157eaf947b6845d0b560}\label{classQueue_a22e0b575ea62157eaf947b6845d0b560}} 
+\index{Queue$<$ T $>$@{Queue$<$ T $>$}!get\_is\_done@{get\_is\_done}}
+\index{get\_is\_done@{get\_is\_done}!Queue$<$ T $>$@{Queue$<$ T $>$}}
+\doxysubsubsection{\texorpdfstring{get\_is\_done()}{get\_is\_done()}}
+{\footnotesize\ttfamily template$<$typename T $>$ \\
+int \mbox{\hyperlink{classQueue}{Queue}}$<$ T $>$\+::get\+\_\+is\+\_\+done (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Gets the value of the \char`\"{}is\+\_\+done\char`\"{} flag. 
+
+\begin{DoxyReturn}{Returns}
+The value of the \char`\"{}is\+\_\+done\char`\"{} flag. 
+\end{DoxyReturn}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{66                           \{}
+\DoxyCodeLine{67             \textcolor{keywordflow}{return} this-\/>is\_done;}
+\DoxyCodeLine{68         \}}
+
+\end{DoxyCode}
+\mbox{\Hypertarget{classQueue_abeee018138cbb5226e5352a5788e23bd}\label{classQueue_abeee018138cbb5226e5352a5788e23bd}} 
+\index{Queue$<$ T $>$@{Queue$<$ T $>$}!pop@{pop}}
+\index{pop@{pop}!Queue$<$ T $>$@{Queue$<$ T $>$}}
+\doxysubsubsection{\texorpdfstring{pop()}{pop()}}
+{\footnotesize\ttfamily template$<$typename T $>$ \\
+T \mbox{\hyperlink{classQueue}{Queue}}$<$ T $>$\+::pop (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Pops an element from the queue. 
+
+\begin{DoxyReturn}{Returns}
+The element popped from the queue. 
+\end{DoxyReturn}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{133                 \{}
+\DoxyCodeLine{134             T item = 0;}
+\DoxyCodeLine{135             \textcolor{keywordtype}{int} timeout\_ms = 500;}
+\DoxyCodeLine{136             pthread\_mutex\_lock(\&mutex\_lock);}
+\DoxyCodeLine{137 }
+\DoxyCodeLine{138             \textcolor{keywordtype}{bool} success = \textcolor{keyword}{true};}
+\DoxyCodeLine{139             \textcolor{keywordflow}{if} (this-\/>m\_queue.size() == 0) \{}
+\DoxyCodeLine{140                 \textcolor{keywordflow}{if} (timeout\_ms > 0) \{}
+\DoxyCodeLine{141                     \textcolor{keyword}{struct }timespec time\_spec;}
+\DoxyCodeLine{142                     clock\_gettime(CLOCK\_REALTIME, \&time\_spec);}
+\DoxyCodeLine{143                     time\_spec.tv\_sec += timeout\_ms / 1000;}
+\DoxyCodeLine{144                     time\_spec.tv\_nsec += (timeout\_ms \% 1000) * 1000000;}
+\DoxyCodeLine{145                     \textcolor{keywordflow}{if} (time\_spec.tv\_nsec > 1000000000) \{}
+\DoxyCodeLine{146                         time\_spec.tv\_sec += 1;}
+\DoxyCodeLine{147                         time\_spec.tv\_nsec -\/= 1000000000;}
+\DoxyCodeLine{148                     \}}
+\DoxyCodeLine{149 }
+\DoxyCodeLine{150                     \textcolor{keywordflow}{if} (pthread\_cond\_timedwait(\&cond\_write, \&mutex\_lock, \&time\_spec) == \mbox{\hyperlink{bosch-assign_8hpp_a799517031a8334a42807b119bb456c53}{TIME\_OUT}}) \{}
+\DoxyCodeLine{151                         std::cout << \textcolor{stringliteral}{"pop: timed out"} << std::endl;}
+\DoxyCodeLine{152                         success = \textcolor{keyword}{false};}
+\DoxyCodeLine{153                     \}}
+\DoxyCodeLine{154                 \} \textcolor{keywordflow}{else} \{}
+\DoxyCodeLine{155                     std::cout << \textcolor{stringliteral}{"pop: queue empty"} << std::endl;}
+\DoxyCodeLine{156                     pthread\_cond\_wait(\&cond\_write, \&mutex\_lock);}
+\DoxyCodeLine{157                 \}}
+\DoxyCodeLine{158             \}}
+\DoxyCodeLine{159 }
+\DoxyCodeLine{160             \textcolor{keywordflow}{if} (success) \{}
+\DoxyCodeLine{161                 item = this-\/>m\_queue.front();}
+\DoxyCodeLine{162                 this-\/>m\_queue.pop();}
+\DoxyCodeLine{163                 pthread\_cond\_signal(\&cond\_read);}
+\DoxyCodeLine{164             \}}
+\DoxyCodeLine{165 }
+\DoxyCodeLine{166             pthread\_mutex\_unlock(\&mutex\_lock);}
+\DoxyCodeLine{167             std::cout << \textcolor{stringliteral}{"pop: released lock\(\backslash\)n"};}
+\DoxyCodeLine{168 }
+\DoxyCodeLine{169             \textcolor{keywordflow}{return} item;}
+\DoxyCodeLine{170         \}}
+
+\end{DoxyCode}
+\mbox{\Hypertarget{classQueue_a052d7e333791e8efcdf18fa5e504bc92}\label{classQueue_a052d7e333791e8efcdf18fa5e504bc92}} 
+\index{Queue$<$ T $>$@{Queue$<$ T $>$}!push@{push}}
+\index{push@{push}!Queue$<$ T $>$@{Queue$<$ T $>$}}
+\doxysubsubsection{\texorpdfstring{push()}{push()}}
+{\footnotesize\ttfamily template$<$typename T $>$ \\
+void \mbox{\hyperlink{classQueue}{Queue}}$<$ T $>$\+::push (\begin{DoxyParamCaption}\item[{T}]{element }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Pushes an element into the queue. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em element} & The element to push into the queue. \\
+\hline
+\end{DoxyParams}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{84                              \{}
+\DoxyCodeLine{85             \textcolor{keywordtype}{int} timeout\_ms = 500;}
+\DoxyCodeLine{86             write\_counts++;}
+\DoxyCodeLine{87             \textcolor{keywordflow}{if} (write\_counts >= 10) \{}
+\DoxyCodeLine{88                 this-\/>\mbox{\hyperlink{classQueue_a03312b60344e10adc76501434b2852f6}{set\_is\_done}}();}
+\DoxyCodeLine{89             \}}
+\DoxyCodeLine{90 }
+\DoxyCodeLine{91             pthread\_mutex\_lock(\&mutex\_lock);}
+\DoxyCodeLine{92             std::cout << \textcolor{stringliteral}{"push: locked"} << std::endl;}
+\DoxyCodeLine{93             \textcolor{keywordtype}{bool} success = \textcolor{keyword}{true};}
+\DoxyCodeLine{94             \textcolor{keywordflow}{if} (\mbox{\hyperlink{classQueue_ad2779bcb60e23b597662c393bf04271c}{count}}() >= \mbox{\hyperlink{classQueue_a0984ba1a6d1e8de2275d7b5f89bb12fa}{queue\_size}}()) \{}
+\DoxyCodeLine{95                 \textcolor{keywordflow}{if} (timeout\_ms > 0) \{}
+\DoxyCodeLine{96                     \textcolor{keyword}{struct }timespec time\_spec;}
+\DoxyCodeLine{97                     clock\_gettime(CLOCK\_REALTIME, \&time\_spec);}
+\DoxyCodeLine{98                     time\_spec.tv\_sec += timeout\_ms / 1000;}
+\DoxyCodeLine{99                     time\_spec.tv\_nsec += (timeout\_ms \% 1000) * 1000000;}
+\DoxyCodeLine{100                     \textcolor{keywordflow}{if} (time\_spec.tv\_nsec > 1000000000) \{}
+\DoxyCodeLine{101                         time\_spec.tv\_sec += 1;}
+\DoxyCodeLine{102                         time\_spec.tv\_nsec -\/= 1000000000;}
+\DoxyCodeLine{103                     \}}
+\DoxyCodeLine{104 }
+\DoxyCodeLine{105                     \textcolor{keywordflow}{if} (pthread\_cond\_timedwait(\&cond\_read, \&mutex\_lock, \&time\_spec) == \mbox{\hyperlink{bosch-assign_8hpp_a799517031a8334a42807b119bb456c53}{TIME\_OUT}}) \{}
+\DoxyCodeLine{106                         std::cout << \textcolor{stringliteral}{"push: timed out"} << std::endl;}
+\DoxyCodeLine{107                         success = \textcolor{keyword}{false};}
+\DoxyCodeLine{108                     \}}
+\DoxyCodeLine{109                 \} \textcolor{keywordflow}{else} \{}
+\DoxyCodeLine{110                     std::cout << \textcolor{stringliteral}{"push: queue full"} << std::endl;}
+\DoxyCodeLine{111                     pthread\_cond\_wait(\&cond\_read, \&mutex\_lock);}
+\DoxyCodeLine{112                 \}}
+\DoxyCodeLine{113             \}}
+\DoxyCodeLine{114 }
+\DoxyCodeLine{115             \textcolor{keywordflow}{if} (success) \{}
+\DoxyCodeLine{116                 this-\/>m\_queue.push(element);}
+\DoxyCodeLine{117                 std::cout << \textcolor{stringliteral}{"push: pushed "} << element << std::endl;}
+\DoxyCodeLine{118                 \textcolor{keywordflow}{if} (1 == \mbox{\hyperlink{classQueue_ad2779bcb60e23b597662c393bf04271c}{count}}()) \{}
+\DoxyCodeLine{119                     pthread\_cond\_signal(\&cond\_write);}
+\DoxyCodeLine{120                     std::cout << \textcolor{stringliteral}{"push: signaled to pop"} << std::endl;}
+\DoxyCodeLine{121                 \}}
+\DoxyCodeLine{122             \}}
+\DoxyCodeLine{123 }
+\DoxyCodeLine{124             pthread\_mutex\_unlock(\&mutex\_lock);}
+\DoxyCodeLine{125             std::cout << \textcolor{stringliteral}{"push: released lock"} << std::endl;}
+\DoxyCodeLine{126         \}}
+
+\end{DoxyCode}
+\mbox{\Hypertarget{classQueue_a0984ba1a6d1e8de2275d7b5f89bb12fa}\label{classQueue_a0984ba1a6d1e8de2275d7b5f89bb12fa}} 
+\index{Queue$<$ T $>$@{Queue$<$ T $>$}!queue\_size@{queue\_size}}
+\index{queue\_size@{queue\_size}!Queue$<$ T $>$@{Queue$<$ T $>$}}
+\doxysubsubsection{\texorpdfstring{queue\_size()}{queue\_size()}}
+{\footnotesize\ttfamily template$<$typename T $>$ \\
+int \mbox{\hyperlink{classQueue}{Queue}}$<$ T $>$\+::queue\+\_\+size (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Gets the maximum capacity of the queue. 
+
+\begin{DoxyReturn}{Returns}
+The maximum capacity of the queue. 
+\end{DoxyReturn}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{75                          \{}
+\DoxyCodeLine{76             \textcolor{keywordflow}{return} this-\/>queue\_capacity;}
+\DoxyCodeLine{77         \}}
+
+\end{DoxyCode}
+\mbox{\Hypertarget{classQueue_a03312b60344e10adc76501434b2852f6}\label{classQueue_a03312b60344e10adc76501434b2852f6}} 
+\index{Queue$<$ T $>$@{Queue$<$ T $>$}!set\_is\_done@{set\_is\_done}}
+\index{set\_is\_done@{set\_is\_done}!Queue$<$ T $>$@{Queue$<$ T $>$}}
+\doxysubsubsection{\texorpdfstring{set\_is\_done()}{set\_is\_done()}}
+{\footnotesize\ttfamily template$<$typename T $>$ \\
+void \mbox{\hyperlink{classQueue}{Queue}}$<$ T $>$\+::set\+\_\+is\+\_\+done (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Sets the \char`\"{}is\+\_\+done\char`\"{} flag to indicate the producer is done. 
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{57                            \{}
+\DoxyCodeLine{58             this-\/>is\_done = 1;}
+\DoxyCodeLine{59         \}}
+
+\end{DoxyCode}
+
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+/home/zeishan/\+Documents/jun-\/19-\/bosch/bosch-\/assign/\mbox{\hyperlink{bosch-assign_8hpp}{bosch-\/assign.\+hpp}}\end{DoxyCompactItemize}
