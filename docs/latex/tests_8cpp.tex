@@ -11,16 +11,42 @@ Include dependency graph for tests.\+cpp\+:
 \includegraphics[width=350pt]{tests_8cpp__incl}
 \end{center}
 \end{figure}
+\doxysubsection*{Classes}
+\begin{DoxyCompactItemize}
+\item 
+class \mbox{\hyperlink{classQueueTestDelay}{Queue\+Test\+Delay}}
+\begin{DoxyCompactList}\small\item\em Fixture for testing the \mbox{\hyperlink{classQueue}{Queue}} class with delay functionality. \end{DoxyCompactList}\end{DoxyCompactItemize}
 \doxysubsection*{Functions}
 \begin{DoxyCompactItemize}
 \item 
+\mbox{\hyperlink{tests_8cpp_a098cd035dfb5e637d77fa90bde10cacb}{T\+E\+S\+T\+\_\+F}} (\mbox{\hyperlink{classQueueTestDelay}{Queue\+Test\+Delay}}, Reading\+And\+Writing\+Thread)
+\begin{DoxyCompactList}\small\item\em Test case for reading and writing threads. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{tests_8cpp_ad5a3a84d5bf35619c026bed4fefb51fc}{T\+E\+S\+T\+\_\+F}} (\mbox{\hyperlink{classQueueTestDelay}{Queue\+Test\+Delay}}, Push\+And\+Pop\+Element)
+\begin{DoxyCompactList}\small\item\em Test case for pushing and popping elements. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{tests_8cpp_a956a0659960025a51a8fdb4bd55ed0d4}{T\+E\+S\+T\+\_\+F}} (\mbox{\hyperlink{classQueueTestDelay}{Queue\+Test\+Delay}}, Is\+Done\+Flag)
+\begin{DoxyCompactList}\small\item\em Test case for is\+\_\+done flag. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{tests_8cpp_a74c7d211a5e7f1cd97c0cce05111410d}{T\+E\+S\+T\+\_\+F}} (\mbox{\hyperlink{classQueueTestDelay}{Queue\+Test\+Delay}}, Pop\+From\+Empty\+Queue)
+\begin{DoxyCompactList}\small\item\em Test case for popping an item from an empty queue with a timeout. \end{DoxyCompactList}\item 
 \mbox{\hyperlink{tests_8cpp_a482a60f499f3b1a348760f02d359ca41}{T\+E\+ST}} (Queue\+Test, Read\+And\+Write)
-\item 
+\begin{DoxyCompactList}\small\item\em Test case for reading and writing thread functions. \end{DoxyCompactList}\item 
 \mbox{\hyperlink{tests_8cpp_a472581d8474ccbb80a1c2b5c0f4a0fb2}{T\+E\+ST}} (Queue\+Test, Push\+And\+Pop)
-\item 
+\begin{DoxyCompactList}\small\item\em Test case for verifying the order of elements. \end{DoxyCompactList}\item 
 \mbox{\hyperlink{tests_8cpp_ab47130969bda07aafee59846d5115c86}{T\+E\+ST}} (Queue\+Test, Is\+Done\+Flag\+After\+Processing)
 \item 
+\mbox{\hyperlink{tests_8cpp_a5c5ef40bbfa7dc54c83ae3c8c4efee98}{T\+E\+ST}} (Queue\+Test, Queue\+Full)
+\begin{DoxyCompactList}\small\item\em Test case to verify the delay functionality of push funciton. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{tests_8cpp_a3025826d07c0cc62ed9a2cde79e0f302}{T\+E\+ST}} (Queue\+Test, Queue\+Empty)
+\begin{DoxyCompactList}\small\item\em Test case to verify delay funcitonality of the pop function. \end{DoxyCompactList}\item 
 int \mbox{\hyperlink{tests_8cpp_a3c04138a5bfe5d72780bb7e82a18e627}{main}} (int argc, char $\ast$$\ast$argv)
+\end{DoxyCompactItemize}
+\doxysubsection*{Variables}
+\begin{DoxyCompactItemize}
+\item 
+pthread\+\_\+t \mbox{\hyperlink{tests_8cpp_a0d4ff7eca0962a2b99939c4d05284fad}{w\+\_\+thread}}
+\item 
+pthread\+\_\+t \mbox{\hyperlink{tests_8cpp_a3b6616187b0680806b89d742b6989862}{r\+\_\+thread}}
+\item 
+\mbox{\hyperlink{classQueue}{Queue}}$<$ int $>$ $\ast$ \mbox{\hyperlink{tests_8cpp_a6ceebe9bd35a091156e386f63b578109}{queue}}
 \end{DoxyCompactItemize}
 
 
@@ -33,105 +59,276 @@ int \mbox{\hyperlink{tests_8cpp_a3c04138a5bfe5d72780bb7e82a18e627}{main}} (int a
 
 
 \begin{DoxyCode}{0}
-\DoxyCodeLine{110                                 \{}
-\DoxyCodeLine{111     ::testing::InitGoogleTest(\&argc, argv);}
-\DoxyCodeLine{112     \textcolor{keywordflow}{return} RUN\_ALL\_TESTS();}
-\DoxyCodeLine{113 \}}
+\DoxyCodeLine{220                                 \{}
+\DoxyCodeLine{221     ::testing::InitGoogleTest(\&argc, argv);}
+\DoxyCodeLine{222     \textcolor{keywordflow}{return} RUN\_ALL\_TESTS();}
+\DoxyCodeLine{223 \}}
 
 \end{DoxyCode}
 \mbox{\Hypertarget{tests_8cpp_ab47130969bda07aafee59846d5115c86}\label{tests_8cpp_ab47130969bda07aafee59846d5115c86}} 
 \index{tests.cpp@{tests.cpp}!TEST@{TEST}}
 \index{TEST@{TEST}!tests.cpp@{tests.cpp}}
-\doxysubsubsection{\texorpdfstring{TEST()}{TEST()}\hspace{0.1cm}{\footnotesize\ttfamily [1/3]}}
+\doxysubsubsection{\texorpdfstring{TEST()}{TEST()}\hspace{0.1cm}{\footnotesize\ttfamily [1/5]}}
 {\footnotesize\ttfamily T\+E\+ST (\begin{DoxyParamCaption}\item[{Queue\+Test}]{,  }\item[{Is\+Done\+Flag\+After\+Processing}]{ }\end{DoxyParamCaption})}
 
 
 \begin{DoxyCode}{0}
-\DoxyCodeLine{58                                            \{}
-\DoxyCodeLine{59     \mbox{\hyperlink{classQueue}{Queue<int>}} queue(5);}
-\DoxyCodeLine{60     \textcolor{comment}{// Create writer thread}}
-\DoxyCodeLine{61     pthread\_t writerThread;}
-\DoxyCodeLine{62     pthread\_create(\&writerThread, NULL, \mbox{\hyperlink{bosch-assign_8hpp_a35c056ce555ff51abe0ca3d8fb7e4bab}{writer}}, \&queue);}
-\DoxyCodeLine{63 }
-\DoxyCodeLine{64     \textcolor{comment}{// Create reader thread}}
-\DoxyCodeLine{65     pthread\_t readerThread;}
-\DoxyCodeLine{66     pthread\_create(\&readerThread, NULL, \mbox{\hyperlink{bosch-assign_8hpp_a9901212efa6943de07eee8a84bb97a61}{reader}}, \&queue);}
-\DoxyCodeLine{67 }
-\DoxyCodeLine{68     \textcolor{comment}{// Wait for the threads to finish}}
-\DoxyCodeLine{69     \textcolor{keywordtype}{void}* w\_retval;}
-\DoxyCodeLine{70     \textcolor{keywordtype}{void}* r\_retval;}
-\DoxyCodeLine{71     pthread\_join(writerThread, \&w\_retval);}
-\DoxyCodeLine{72     pthread\_join(readerThread, \&r\_retval);}
-\DoxyCodeLine{73 }
-\DoxyCodeLine{74     \textcolor{comment}{// Check the is\_done flag for producer done}}
-\DoxyCodeLine{75     ASSERT\_EQ(queue.get\_is\_done(), 1);}
-\DoxyCodeLine{76 \}}
+\DoxyCodeLine{164                                            \{}
+\DoxyCodeLine{165     \mbox{\hyperlink{classQueue}{Queue<int>}} \mbox{\hyperlink{tests_8cpp_a6ceebe9bd35a091156e386f63b578109}{queue}}(5);}
+\DoxyCodeLine{166 }
+\DoxyCodeLine{167     pthread\_t writerThread;}
+\DoxyCodeLine{168     pthread\_create(\&writerThread, NULL, \mbox{\hyperlink{bosch-assign_8hpp_a35c056ce555ff51abe0ca3d8fb7e4bab}{writer}}, \&\mbox{\hyperlink{tests_8cpp_a6ceebe9bd35a091156e386f63b578109}{queue}});}
+\DoxyCodeLine{169 }
+\DoxyCodeLine{170     pthread\_t readerThread;}
+\DoxyCodeLine{171     pthread\_create(\&readerThread, NULL, \mbox{\hyperlink{bosch-assign_8hpp_a9901212efa6943de07eee8a84bb97a61}{reader}}, \&\mbox{\hyperlink{tests_8cpp_a6ceebe9bd35a091156e386f63b578109}{queue}});}
+\DoxyCodeLine{172 }
+\DoxyCodeLine{173     \textcolor{keywordtype}{void}* w\_retval;}
+\DoxyCodeLine{174     \textcolor{keywordtype}{void}* r\_retval;}
+\DoxyCodeLine{175     pthread\_join(writerThread, \&w\_retval);}
+\DoxyCodeLine{176     pthread\_join(readerThread, \&r\_retval);}
+\DoxyCodeLine{177 }
+\DoxyCodeLine{178     ASSERT\_EQ(\mbox{\hyperlink{tests_8cpp_a6ceebe9bd35a091156e386f63b578109}{queue}}.get\_is\_done(), 1);}
+\DoxyCodeLine{179 \}}
 
 \end{DoxyCode}
 \mbox{\Hypertarget{tests_8cpp_a472581d8474ccbb80a1c2b5c0f4a0fb2}\label{tests_8cpp_a472581d8474ccbb80a1c2b5c0f4a0fb2}} 
 \index{tests.cpp@{tests.cpp}!TEST@{TEST}}
 \index{TEST@{TEST}!tests.cpp@{tests.cpp}}
-\doxysubsubsection{\texorpdfstring{TEST()}{TEST()}\hspace{0.1cm}{\footnotesize\ttfamily [2/3]}}
+\doxysubsubsection{\texorpdfstring{TEST()}{TEST()}\hspace{0.1cm}{\footnotesize\ttfamily [2/5]}}
 {\footnotesize\ttfamily T\+E\+ST (\begin{DoxyParamCaption}\item[{Queue\+Test}]{,  }\item[{Push\+And\+Pop}]{ }\end{DoxyParamCaption})}
 
 
+
+Test case for verifying the order of elements. 
+
+This test case validates the order of the popped elements which were pushed to the queue; without delay functionality. It creates the queue with the capacity of five elements than pushes five elements in a row. The test expects the popped elements in the order they are pushed and queue size to be zero in the end. 
 \begin{DoxyCode}{0}
-\DoxyCodeLine{35                             \{}
-\DoxyCodeLine{36     \textcolor{comment}{// Create a queue with a capacity of 5}}
-\DoxyCodeLine{37     \mbox{\hyperlink{classQueue}{Queue<int>}} queue(5);}
-\DoxyCodeLine{38 }
-\DoxyCodeLine{39     \textcolor{comment}{// Push five elements into the queue}}
-\DoxyCodeLine{40     queue.push(10);}
-\DoxyCodeLine{41     queue.push(20);}
-\DoxyCodeLine{42     queue.push(30);}
-\DoxyCodeLine{43     queue.push(40);}
-\DoxyCodeLine{44     queue.push(50);}
-\DoxyCodeLine{45 }
-\DoxyCodeLine{46     \textcolor{comment}{// Pop the elements and verify their order}}
-\DoxyCodeLine{47     EXPECT\_EQ(10, queue.pop());}
-\DoxyCodeLine{48     EXPECT\_EQ(20, queue.pop());}
-\DoxyCodeLine{49     EXPECT\_EQ(30, queue.pop());}
-\DoxyCodeLine{50     EXPECT\_EQ(40, queue.pop());}
-\DoxyCodeLine{51     EXPECT\_EQ(50, queue.pop());}
-\DoxyCodeLine{52 }
-\DoxyCodeLine{53     \textcolor{comment}{// After popping all elements, the queue should be empty}}
-\DoxyCodeLine{54     EXPECT\_EQ(0, queue.count());}
-\DoxyCodeLine{55 \}}
+\DoxyCodeLine{139                             \{}
+\DoxyCodeLine{140     \mbox{\hyperlink{classQueue}{Queue<int>}} \mbox{\hyperlink{tests_8cpp_a6ceebe9bd35a091156e386f63b578109}{queue}}(5);}
+\DoxyCodeLine{141     \textcolor{keywordtype}{int} item;}
+\DoxyCodeLine{142 }
+\DoxyCodeLine{143     \mbox{\hyperlink{tests_8cpp_a6ceebe9bd35a091156e386f63b578109}{queue}}.push(10);}
+\DoxyCodeLine{144     \mbox{\hyperlink{tests_8cpp_a6ceebe9bd35a091156e386f63b578109}{queue}}.push(20);}
+\DoxyCodeLine{145     \mbox{\hyperlink{tests_8cpp_a6ceebe9bd35a091156e386f63b578109}{queue}}.push(30);}
+\DoxyCodeLine{146     \mbox{\hyperlink{tests_8cpp_a6ceebe9bd35a091156e386f63b578109}{queue}}.push(40);}
+\DoxyCodeLine{147     \mbox{\hyperlink{tests_8cpp_a6ceebe9bd35a091156e386f63b578109}{queue}}.push(50);}
+\DoxyCodeLine{148 }
+\DoxyCodeLine{149     \mbox{\hyperlink{tests_8cpp_a6ceebe9bd35a091156e386f63b578109}{queue}}.pop(item);}
+\DoxyCodeLine{150     EXPECT\_EQ(10, item);}
+\DoxyCodeLine{151     \mbox{\hyperlink{tests_8cpp_a6ceebe9bd35a091156e386f63b578109}{queue}}.pop(item);}
+\DoxyCodeLine{152     EXPECT\_EQ(20, item);}
+\DoxyCodeLine{153     \mbox{\hyperlink{tests_8cpp_a6ceebe9bd35a091156e386f63b578109}{queue}}.pop(item);}
+\DoxyCodeLine{154     EXPECT\_EQ(30, item);}
+\DoxyCodeLine{155     \mbox{\hyperlink{tests_8cpp_a6ceebe9bd35a091156e386f63b578109}{queue}}.pop(item);}
+\DoxyCodeLine{156     EXPECT\_EQ(40, item);}
+\DoxyCodeLine{157     \mbox{\hyperlink{tests_8cpp_a6ceebe9bd35a091156e386f63b578109}{queue}}.pop(item);}
+\DoxyCodeLine{158     EXPECT\_EQ(50, item);}
+\DoxyCodeLine{159 }
+\DoxyCodeLine{160     EXPECT\_EQ(0, \mbox{\hyperlink{tests_8cpp_a6ceebe9bd35a091156e386f63b578109}{queue}}.count());}
+\DoxyCodeLine{161 \}}
+
+\end{DoxyCode}
+\mbox{\Hypertarget{tests_8cpp_a3025826d07c0cc62ed9a2cde79e0f302}\label{tests_8cpp_a3025826d07c0cc62ed9a2cde79e0f302}} 
+\index{tests.cpp@{tests.cpp}!TEST@{TEST}}
+\index{TEST@{TEST}!tests.cpp@{tests.cpp}}
+\doxysubsubsection{\texorpdfstring{TEST()}{TEST()}\hspace{0.1cm}{\footnotesize\ttfamily [3/5]}}
+{\footnotesize\ttfamily T\+E\+ST (\begin{DoxyParamCaption}\item[{Queue\+Test}]{,  }\item[{Queue\+Empty}]{ }\end{DoxyParamCaption})}
+
+
+
+Test case to verify delay funcitonality of the pop function. 
+
+This test case validates the return \textquotesingle{}false\textquotesingle{} funcitonality when trying to pop an element from the empty queue, with delay. The test expects the pop function to return false when it could not pop the element within the set time. The test case also keeps an eye over the queue size when pushing and popping elements. 
+\begin{DoxyCode}{0}
+\DoxyCodeLine{202                             \{}
+\DoxyCodeLine{203     \mbox{\hyperlink{classQueue}{Queue<int>}} \mbox{\hyperlink{tests_8cpp_a6ceebe9bd35a091156e386f63b578109}{queue}}(2);}
+\DoxyCodeLine{204     \textcolor{keywordtype}{int} item;}
+\DoxyCodeLine{205     \textcolor{comment}{// Push 2 elements into the Queue}}
+\DoxyCodeLine{206     ASSERT\_TRUE(\mbox{\hyperlink{tests_8cpp_a6ceebe9bd35a091156e386f63b578109}{queue}}.push(1));}
+\DoxyCodeLine{207     ASSERT\_TRUE(\mbox{\hyperlink{tests_8cpp_a6ceebe9bd35a091156e386f63b578109}{queue}}.push(2));}
+\DoxyCodeLine{208     EXPECT\_EQ(2, \mbox{\hyperlink{tests_8cpp_a6ceebe9bd35a091156e386f63b578109}{queue}}.count());}
+\DoxyCodeLine{209 }
+\DoxyCodeLine{210     ASSERT\_TRUE(\mbox{\hyperlink{tests_8cpp_a6ceebe9bd35a091156e386f63b578109}{queue}}.pop(item));}
+\DoxyCodeLine{211     EXPECT\_EQ(1, item);}
+\DoxyCodeLine{212     ASSERT\_TRUE(\mbox{\hyperlink{tests_8cpp_a6ceebe9bd35a091156e386f63b578109}{queue}}.pop(item));}
+\DoxyCodeLine{213     EXPECT\_EQ(2, item);}
+\DoxyCodeLine{214     EXPECT\_EQ(0, \mbox{\hyperlink{tests_8cpp_a6ceebe9bd35a091156e386f63b578109}{queue}}.count());}
+\DoxyCodeLine{215 }
+\DoxyCodeLine{216     \textcolor{comment}{// Try to pop element from the empty Queue}}
+\DoxyCodeLine{217     ASSERT\_FALSE(\mbox{\hyperlink{tests_8cpp_a6ceebe9bd35a091156e386f63b578109}{queue}}.pop(item,1000));}
+\DoxyCodeLine{218 \}}
+
+\end{DoxyCode}
+\mbox{\Hypertarget{tests_8cpp_a5c5ef40bbfa7dc54c83ae3c8c4efee98}\label{tests_8cpp_a5c5ef40bbfa7dc54c83ae3c8c4efee98}} 
+\index{tests.cpp@{tests.cpp}!TEST@{TEST}}
+\index{TEST@{TEST}!tests.cpp@{tests.cpp}}
+\doxysubsubsection{\texorpdfstring{TEST()}{TEST()}\hspace{0.1cm}{\footnotesize\ttfamily [4/5]}}
+{\footnotesize\ttfamily T\+E\+ST (\begin{DoxyParamCaption}\item[{Queue\+Test}]{,  }\item[{Queue\+Full}]{ }\end{DoxyParamCaption})}
+
+
+
+Test case to verify the delay functionality of push funciton. 
+
+This test case validates the return \textquotesingle{}false\textquotesingle{} funcitonality when trying to push an element into the full queue, with delay. The test expects the push function to return false when it could not push the element within the set time. 
+\begin{DoxyCode}{0}
+\DoxyCodeLine{187                            \{}
+\DoxyCodeLine{188     \mbox{\hyperlink{classQueue}{Queue<int>}} \mbox{\hyperlink{tests_8cpp_a6ceebe9bd35a091156e386f63b578109}{queue}}(2);}
+\DoxyCodeLine{189     ASSERT\_TRUE(\mbox{\hyperlink{tests_8cpp_a6ceebe9bd35a091156e386f63b578109}{queue}}.push(1));}
+\DoxyCodeLine{190     ASSERT\_TRUE(\mbox{\hyperlink{tests_8cpp_a6ceebe9bd35a091156e386f63b578109}{queue}}.push(2));}
+\DoxyCodeLine{191 }
+\DoxyCodeLine{192     ASSERT\_FALSE(\mbox{\hyperlink{tests_8cpp_a6ceebe9bd35a091156e386f63b578109}{queue}}.push(3,1000));}
+\DoxyCodeLine{193 \}}
 
 \end{DoxyCode}
 \mbox{\Hypertarget{tests_8cpp_a482a60f499f3b1a348760f02d359ca41}\label{tests_8cpp_a482a60f499f3b1a348760f02d359ca41}} 
 \index{tests.cpp@{tests.cpp}!TEST@{TEST}}
 \index{TEST@{TEST}!tests.cpp@{tests.cpp}}
-\doxysubsubsection{\texorpdfstring{TEST()}{TEST()}\hspace{0.1cm}{\footnotesize\ttfamily [3/3]}}
+\doxysubsubsection{\texorpdfstring{TEST()}{TEST()}\hspace{0.1cm}{\footnotesize\ttfamily [5/5]}}
 {\footnotesize\ttfamily T\+E\+ST (\begin{DoxyParamCaption}\item[{Queue\+Test}]{,  }\item[{Read\+And\+Write}]{ }\end{DoxyParamCaption})}
 
 
+
+Test case for reading and writing thread functions. 
+
+Previous test cases below This test case validates the behavior of the reading and writing threads working concurrently without delay functionality. It creates and joins the writer and reader threads, and checks the return values of both threads. The test expects the writer thread to return 100 and the reader thread to return 200. 
 \begin{DoxyCode}{0}
-\DoxyCodeLine{6                               \{}
-\DoxyCodeLine{7     \textcolor{comment}{// Create a queue with a capacity of 5}}
-\DoxyCodeLine{8     \mbox{\hyperlink{classQueue}{Queue<int>}} myQueue(5);}
-\DoxyCodeLine{9 }
-\DoxyCodeLine{10     \textcolor{comment}{// Create writer thread}}
-\DoxyCodeLine{11     pthread\_t writerThread;}
-\DoxyCodeLine{12     pthread\_create(\&writerThread, NULL, \mbox{\hyperlink{bosch-assign_8hpp_a35c056ce555ff51abe0ca3d8fb7e4bab}{writer}}, \&myQueue);}
-\DoxyCodeLine{13 }
-\DoxyCodeLine{14     \textcolor{comment}{// Create reader thread}}
-\DoxyCodeLine{15     pthread\_t readerThread;}
-\DoxyCodeLine{16     pthread\_create(\&readerThread, NULL, \mbox{\hyperlink{bosch-assign_8hpp_a9901212efa6943de07eee8a84bb97a61}{reader}}, \&myQueue);}
-\DoxyCodeLine{17 }
-\DoxyCodeLine{18     \textcolor{comment}{// Wait for writer thread to finish}}
-\DoxyCodeLine{19     \textcolor{keywordtype}{void}* w\_ret\_val;}
-\DoxyCodeLine{20     pthread\_join(writerThread, \&w\_ret\_val);}
-\DoxyCodeLine{21 }
-\DoxyCodeLine{22     \textcolor{comment}{// Wait for reader thread to finish}}
-\DoxyCodeLine{23     \textcolor{keywordtype}{void}* r\_ret\_val;}
-\DoxyCodeLine{24     pthread\_join(readerThread, \&r\_ret\_val);}
-\DoxyCodeLine{25 }
-\DoxyCodeLine{26     \textcolor{comment}{// Verify the return values of the threads}}
-\DoxyCodeLine{27     \textcolor{keywordtype}{int} \mbox{\hyperlink{bosch-assign_8hpp_a2cac1cf601aa4d78b56b0acc6918da87}{w\_ret}} = *(\textcolor{keyword}{static\_cast<}\textcolor{keywordtype}{int}*\textcolor{keyword}{>}(w\_ret\_val));}
-\DoxyCodeLine{28     \textcolor{keywordtype}{int} \mbox{\hyperlink{bosch-assign_8hpp_ab0bfdf0bc5aec3cf3a221da246abe9b7}{r\_ret}} = *(\textcolor{keyword}{static\_cast<}\textcolor{keywordtype}{int}*\textcolor{keyword}{>}(r\_ret\_val));}
-\DoxyCodeLine{29     EXPECT\_EQ(100, \mbox{\hyperlink{bosch-assign_8hpp_a2cac1cf601aa4d78b56b0acc6918da87}{w\_ret}});}
-\DoxyCodeLine{30     EXPECT\_EQ(200, \mbox{\hyperlink{bosch-assign_8hpp_ab0bfdf0bc5aec3cf3a221da246abe9b7}{r\_ret}});}
-\DoxyCodeLine{31 \}}
+\DoxyCodeLine{111                               \{}
+\DoxyCodeLine{112     \mbox{\hyperlink{classQueue}{Queue<int>}} myQueue(5);}
+\DoxyCodeLine{113     pthread\_t writerThread;}
+\DoxyCodeLine{114     pthread\_create(\&writerThread, NULL, \mbox{\hyperlink{bosch-assign_8hpp_a35c056ce555ff51abe0ca3d8fb7e4bab}{writer}}, \&myQueue);}
+\DoxyCodeLine{115 }
+\DoxyCodeLine{116     pthread\_t readerThread;}
+\DoxyCodeLine{117     pthread\_create(\&readerThread, NULL, \mbox{\hyperlink{bosch-assign_8hpp_a9901212efa6943de07eee8a84bb97a61}{reader}}, \&myQueue);}
+\DoxyCodeLine{118 }
+\DoxyCodeLine{119     \textcolor{keywordtype}{void}* w\_ret\_val;}
+\DoxyCodeLine{120     pthread\_join(writerThread, \&w\_ret\_val);}
+\DoxyCodeLine{121 }
+\DoxyCodeLine{122     \textcolor{keywordtype}{void}* r\_ret\_val;}
+\DoxyCodeLine{123     pthread\_join(readerThread, \&r\_ret\_val);}
+\DoxyCodeLine{124 }
+\DoxyCodeLine{125     \textcolor{keywordtype}{int} \mbox{\hyperlink{bosch-assign_8hpp_a2cac1cf601aa4d78b56b0acc6918da87}{w\_ret}} = *(\textcolor{keyword}{static\_cast<}\textcolor{keywordtype}{int}*\textcolor{keyword}{>}(w\_ret\_val));}
+\DoxyCodeLine{126     \textcolor{keywordtype}{int} \mbox{\hyperlink{bosch-assign_8hpp_ab0bfdf0bc5aec3cf3a221da246abe9b7}{r\_ret}} = *(\textcolor{keyword}{static\_cast<}\textcolor{keywordtype}{int}*\textcolor{keyword}{>}(r\_ret\_val));}
+\DoxyCodeLine{127     EXPECT\_EQ(100, \mbox{\hyperlink{bosch-assign_8hpp_a2cac1cf601aa4d78b56b0acc6918da87}{w\_ret}});}
+\DoxyCodeLine{128     EXPECT\_EQ(200, \mbox{\hyperlink{bosch-assign_8hpp_ab0bfdf0bc5aec3cf3a221da246abe9b7}{r\_ret}});}
+\DoxyCodeLine{129 \}}
 
 \end{DoxyCode}
+\mbox{\Hypertarget{tests_8cpp_a956a0659960025a51a8fdb4bd55ed0d4}\label{tests_8cpp_a956a0659960025a51a8fdb4bd55ed0d4}} 
+\index{tests.cpp@{tests.cpp}!TEST\_F@{TEST\_F}}
+\index{TEST\_F@{TEST\_F}!tests.cpp@{tests.cpp}}
+\doxysubsubsection{\texorpdfstring{TEST\_F()}{TEST\_F()}\hspace{0.1cm}{\footnotesize\ttfamily [1/4]}}
+{\footnotesize\ttfamily T\+E\+S\+T\+\_\+F (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classQueueTestDelay}{Queue\+Test\+Delay}}}]{,  }\item[{Is\+Done\+Flag}]{ }\end{DoxyParamCaption})}
+
+
+
+Test case for is\+\_\+done flag. 
+
+This test case verifies the behavior of the is\+\_\+done flag in the \mbox{\hyperlink{classQueue}{Queue}} class with delay functionality. It creates and joins the reader and writer threads and checks if the is\+\_\+done flag is set to true at the end. The test expects the is\+\_\+done flag to be true after both threads have finished. 
+\begin{DoxyCode}{0}
+\DoxyCodeLine{75                                    \{}
+\DoxyCodeLine{76     \textcolor{keywordtype}{void}* \mbox{\hyperlink{bosch-assign_8hpp_a2cac1cf601aa4d78b56b0acc6918da87}{w\_ret}};}
+\DoxyCodeLine{77     \textcolor{keywordtype}{void}* \mbox{\hyperlink{bosch-assign_8hpp_ab0bfdf0bc5aec3cf3a221da246abe9b7}{r\_ret}};}
+\DoxyCodeLine{78     pthread\_create(\&\mbox{\hyperlink{tests_8cpp_a3b6616187b0680806b89d742b6989862}{r\_thread}}, NULL, \mbox{\hyperlink{bosch-assign_8hpp_a9901212efa6943de07eee8a84bb97a61}{reader}}, \mbox{\hyperlink{tests_8cpp_a6ceebe9bd35a091156e386f63b578109}{queue}});}
+\DoxyCodeLine{79     pthread\_create(\&\mbox{\hyperlink{tests_8cpp_a0d4ff7eca0962a2b99939c4d05284fad}{w\_thread}}, NULL, \mbox{\hyperlink{bosch-assign_8hpp_a35c056ce555ff51abe0ca3d8fb7e4bab}{writer}}, \mbox{\hyperlink{tests_8cpp_a6ceebe9bd35a091156e386f63b578109}{queue}});}
+\DoxyCodeLine{80     pthread\_join(\mbox{\hyperlink{tests_8cpp_a3b6616187b0680806b89d742b6989862}{r\_thread}}, \&\mbox{\hyperlink{bosch-assign_8hpp_ab0bfdf0bc5aec3cf3a221da246abe9b7}{r\_ret}});}
+\DoxyCodeLine{81     pthread\_join(\mbox{\hyperlink{tests_8cpp_a0d4ff7eca0962a2b99939c4d05284fad}{w\_thread}}, \&\mbox{\hyperlink{bosch-assign_8hpp_a2cac1cf601aa4d78b56b0acc6918da87}{w\_ret}});}
+\DoxyCodeLine{82 }
+\DoxyCodeLine{83     ASSERT\_TRUE(\mbox{\hyperlink{tests_8cpp_a6ceebe9bd35a091156e386f63b578109}{queue}}-\/>get\_is\_done());}
+\DoxyCodeLine{84 \}}
+
+\end{DoxyCode}
+\mbox{\Hypertarget{tests_8cpp_a74c7d211a5e7f1cd97c0cce05111410d}\label{tests_8cpp_a74c7d211a5e7f1cd97c0cce05111410d}} 
+\index{tests.cpp@{tests.cpp}!TEST\_F@{TEST\_F}}
+\index{TEST\_F@{TEST\_F}!tests.cpp@{tests.cpp}}
+\doxysubsubsection{\texorpdfstring{TEST\_F()}{TEST\_F()}\hspace{0.1cm}{\footnotesize\ttfamily [2/4]}}
+{\footnotesize\ttfamily T\+E\+S\+T\+\_\+F (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classQueueTestDelay}{Queue\+Test\+Delay}}}]{,  }\item[{Pop\+From\+Empty\+Queue}]{ }\end{DoxyParamCaption})}
+
+
+
+Test case for popping an item from an empty queue with a timeout. 
+
+This test case validates the behavior of popping an item from an empty queue with a timeout. It checks if the pop operation returns false when the queue is empty and a timeout is specified. The test expects the pop operation to fail (returning false). 
+\begin{DoxyCode}{0}
+\DoxyCodeLine{93                                           \{}
+\DoxyCodeLine{94     \textcolor{keywordtype}{int} item;}
+\DoxyCodeLine{95     EXPECT\_EQ(0, \mbox{\hyperlink{tests_8cpp_a6ceebe9bd35a091156e386f63b578109}{queue}}-\/>count());}
+\DoxyCodeLine{96     ASSERT\_FALSE(\mbox{\hyperlink{tests_8cpp_a6ceebe9bd35a091156e386f63b578109}{queue}}-\/>pop(item, 500));}
+\DoxyCodeLine{97 \}}
+
+\end{DoxyCode}
+\mbox{\Hypertarget{tests_8cpp_ad5a3a84d5bf35619c026bed4fefb51fc}\label{tests_8cpp_ad5a3a84d5bf35619c026bed4fefb51fc}} 
+\index{tests.cpp@{tests.cpp}!TEST\_F@{TEST\_F}}
+\index{TEST\_F@{TEST\_F}!tests.cpp@{tests.cpp}}
+\doxysubsubsection{\texorpdfstring{TEST\_F()}{TEST\_F()}\hspace{0.1cm}{\footnotesize\ttfamily [3/4]}}
+{\footnotesize\ttfamily T\+E\+S\+T\+\_\+F (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classQueueTestDelay}{Queue\+Test\+Delay}}}]{,  }\item[{Push\+And\+Pop\+Element}]{ }\end{DoxyParamCaption})}
+
+
+
+Test case for pushing and popping elements. 
+
+This test case verifies the functionality of pushing elements into the queue and popping them back with delay functionality. It checks the count of the queue before and after pushing elements, and also validates the popped items. The test expects successful pushes and pops of elements, and an empty queue at the end. 
+\begin{DoxyCode}{0}
+\DoxyCodeLine{55                                           \{}
+\DoxyCodeLine{56     \textcolor{keywordtype}{int} item;}
+\DoxyCodeLine{57     EXPECT\_EQ(0, \mbox{\hyperlink{tests_8cpp_a6ceebe9bd35a091156e386f63b578109}{queue}}-\/>count());}
+\DoxyCodeLine{58     ASSERT\_TRUE(\mbox{\hyperlink{tests_8cpp_a6ceebe9bd35a091156e386f63b578109}{queue}}-\/>push(1, 100));}
+\DoxyCodeLine{59     ASSERT\_TRUE(\mbox{\hyperlink{tests_8cpp_a6ceebe9bd35a091156e386f63b578109}{queue}}-\/>push(2, 100));}
+\DoxyCodeLine{60     EXPECT\_EQ(2, \mbox{\hyperlink{tests_8cpp_a6ceebe9bd35a091156e386f63b578109}{queue}}-\/>count());}
+\DoxyCodeLine{61     ASSERT\_TRUE(\mbox{\hyperlink{tests_8cpp_a6ceebe9bd35a091156e386f63b578109}{queue}}-\/>pop(item, 100));}
+\DoxyCodeLine{62     ASSERT\_EQ(1, item);}
+\DoxyCodeLine{63     ASSERT\_TRUE(\mbox{\hyperlink{tests_8cpp_a6ceebe9bd35a091156e386f63b578109}{queue}}-\/>pop(item, 100));}
+\DoxyCodeLine{64     ASSERT\_EQ(2, item);}
+\DoxyCodeLine{65     EXPECT\_EQ(0, \mbox{\hyperlink{tests_8cpp_a6ceebe9bd35a091156e386f63b578109}{queue}}-\/>count());}
+\DoxyCodeLine{66 \}}
+
+\end{DoxyCode}
+\mbox{\Hypertarget{tests_8cpp_a098cd035dfb5e637d77fa90bde10cacb}\label{tests_8cpp_a098cd035dfb5e637d77fa90bde10cacb}} 
+\index{tests.cpp@{tests.cpp}!TEST\_F@{TEST\_F}}
+\index{TEST\_F@{TEST\_F}!tests.cpp@{tests.cpp}}
+\doxysubsubsection{\texorpdfstring{TEST\_F()}{TEST\_F()}\hspace{0.1cm}{\footnotesize\ttfamily [4/4]}}
+{\footnotesize\ttfamily T\+E\+S\+T\+\_\+F (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classQueueTestDelay}{Queue\+Test\+Delay}}}]{,  }\item[{Reading\+And\+Writing\+Thread}]{ }\end{DoxyParamCaption})}
+
+
+
+Test case for reading and writing threads. 
+
+This test case validates the behavior of the reading and writing threads working concurrently with delay functionality. It creates and joins the writer and reader threads, and checks the return values of both threads. The test expects the writer thread to return 100 and the reader thread to return 200. 
+\begin{DoxyCode}{0}
+\DoxyCodeLine{32                                                 \{}
+\DoxyCodeLine{33     \textcolor{keywordtype}{void}* \mbox{\hyperlink{bosch-assign_8hpp_a2cac1cf601aa4d78b56b0acc6918da87}{w\_ret}};}
+\DoxyCodeLine{34     \textcolor{keywordtype}{void}* \mbox{\hyperlink{bosch-assign_8hpp_ab0bfdf0bc5aec3cf3a221da246abe9b7}{r\_ret}};}
+\DoxyCodeLine{35     pthread\_create(\&\mbox{\hyperlink{tests_8cpp_a0d4ff7eca0962a2b99939c4d05284fad}{w\_thread}}, NULL, \mbox{\hyperlink{bosch-assign_8hpp_a35c056ce555ff51abe0ca3d8fb7e4bab}{writer}}, \mbox{\hyperlink{tests_8cpp_a6ceebe9bd35a091156e386f63b578109}{queue}});}
+\DoxyCodeLine{36     pthread\_create(\&\mbox{\hyperlink{tests_8cpp_a3b6616187b0680806b89d742b6989862}{r\_thread}}, NULL, \mbox{\hyperlink{bosch-assign_8hpp_a9901212efa6943de07eee8a84bb97a61}{reader}}, \mbox{\hyperlink{tests_8cpp_a6ceebe9bd35a091156e386f63b578109}{queue}});}
+\DoxyCodeLine{37     pthread\_join(\mbox{\hyperlink{tests_8cpp_a0d4ff7eca0962a2b99939c4d05284fad}{w\_thread}}, \&\mbox{\hyperlink{bosch-assign_8hpp_a2cac1cf601aa4d78b56b0acc6918da87}{w\_ret}});}
+\DoxyCodeLine{38     pthread\_join(\mbox{\hyperlink{tests_8cpp_a3b6616187b0680806b89d742b6989862}{r\_thread}}, \&\mbox{\hyperlink{bosch-assign_8hpp_ab0bfdf0bc5aec3cf3a221da246abe9b7}{r\_ret}});}
+\DoxyCodeLine{39 }
+\DoxyCodeLine{40     \textcolor{keywordtype}{int} w\_ret\_val = *(\textcolor{keyword}{static\_cast<}\textcolor{keywordtype}{int}*\textcolor{keyword}{>}(\mbox{\hyperlink{bosch-assign_8hpp_a2cac1cf601aa4d78b56b0acc6918da87}{w\_ret}}));}
+\DoxyCodeLine{41     std::cout << \textcolor{stringliteral}{"writer thread returned: "} << w\_ret\_val << std::endl;}
+\DoxyCodeLine{42     \textcolor{keywordtype}{int} r\_ret\_val = *(\textcolor{keyword}{static\_cast<}\textcolor{keywordtype}{int}*\textcolor{keyword}{>}(\mbox{\hyperlink{bosch-assign_8hpp_ab0bfdf0bc5aec3cf3a221da246abe9b7}{r\_ret}}));}
+\DoxyCodeLine{43     std::cout << \textcolor{stringliteral}{"reader thread returned: "} << r\_ret\_val << std::endl;}
+\DoxyCodeLine{44     ASSERT\_EQ(100, w\_ret\_val);}
+\DoxyCodeLine{45     ASSERT\_EQ(200, r\_ret\_val);}
+\DoxyCodeLine{46 \}}
+
+\end{DoxyCode}
+
+
+\doxysubsection{Variable Documentation}
+\mbox{\Hypertarget{tests_8cpp_a6ceebe9bd35a091156e386f63b578109}\label{tests_8cpp_a6ceebe9bd35a091156e386f63b578109}} 
+\index{tests.cpp@{tests.cpp}!queue@{queue}}
+\index{queue@{queue}!tests.cpp@{tests.cpp}}
+\doxysubsubsection{\texorpdfstring{queue}{queue}}
+{\footnotesize\ttfamily \mbox{\hyperlink{classQueue}{Queue}}$<$int$>$$\ast$ queue}
+
+\mbox{\Hypertarget{tests_8cpp_a3b6616187b0680806b89d742b6989862}\label{tests_8cpp_a3b6616187b0680806b89d742b6989862}} 
+\index{tests.cpp@{tests.cpp}!r\_thread@{r\_thread}}
+\index{r\_thread@{r\_thread}!tests.cpp@{tests.cpp}}
+\doxysubsubsection{\texorpdfstring{r\_thread}{r\_thread}}
+{\footnotesize\ttfamily pthread\+\_\+t r\+\_\+thread}
+
+\mbox{\Hypertarget{tests_8cpp_a0d4ff7eca0962a2b99939c4d05284fad}\label{tests_8cpp_a0d4ff7eca0962a2b99939c4d05284fad}} 
+\index{tests.cpp@{tests.cpp}!w\_thread@{w\_thread}}
+\index{w\_thread@{w\_thread}!tests.cpp@{tests.cpp}}
+\doxysubsubsection{\texorpdfstring{w\_thread}{w\_thread}}
+{\footnotesize\ttfamily pthread\+\_\+t w\+\_\+thread}
+

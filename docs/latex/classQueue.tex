@@ -24,9 +24,9 @@ int \mbox{\hyperlink{classQueue_a22e0b575ea62157eaf947b6845d0b560}{get\+\_\+is\+
 \begin{DoxyCompactList}\small\item\em Gets the value of the \char`\"{}is\+\_\+done\char`\"{} flag. \end{DoxyCompactList}\item 
 int \mbox{\hyperlink{classQueue_a0984ba1a6d1e8de2275d7b5f89bb12fa}{queue\+\_\+size}} ()
 \begin{DoxyCompactList}\small\item\em Gets the maximum capacity of the queue. \end{DoxyCompactList}\item 
-void \mbox{\hyperlink{classQueue_a052d7e333791e8efcdf18fa5e504bc92}{push}} (T element)
+bool \mbox{\hyperlink{classQueue_a23ea6a9188e196f40cbb4e15b08c1e53}{push}} (T element, int timeout\+\_\+ms=0)
 \begin{DoxyCompactList}\small\item\em Pushes an element into the queue. \end{DoxyCompactList}\item 
-T \mbox{\hyperlink{classQueue_abeee018138cbb5226e5352a5788e23bd}{pop}} ()
+bool \mbox{\hyperlink{classQueue_a4586ef0e5b058949810ce87487715492}{pop}} (T \&item, int timeout\+\_\+ms=0)
 \begin{DoxyCompactList}\small\item\em Pops an element from the queue. \end{DoxyCompactList}\end{DoxyCompactItemize}
 
 
@@ -135,123 +135,166 @@ The value of the \char`\"{}is\+\_\+done\char`\"{} flag.
 \DoxyCodeLine{68         \}}
 
 \end{DoxyCode}
-\mbox{\Hypertarget{classQueue_abeee018138cbb5226e5352a5788e23bd}\label{classQueue_abeee018138cbb5226e5352a5788e23bd}} 
+\mbox{\Hypertarget{classQueue_a4586ef0e5b058949810ce87487715492}\label{classQueue_a4586ef0e5b058949810ce87487715492}} 
 \index{Queue$<$ T $>$@{Queue$<$ T $>$}!pop@{pop}}
 \index{pop@{pop}!Queue$<$ T $>$@{Queue$<$ T $>$}}
 \doxysubsubsection{\texorpdfstring{pop()}{pop()}}
 {\footnotesize\ttfamily template$<$typename T $>$ \\
-T \mbox{\hyperlink{classQueue}{Queue}}$<$ T $>$\+::pop (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+bool \mbox{\hyperlink{classQueue}{Queue}}$<$ T $>$\+::pop (\begin{DoxyParamCaption}\item[{T \&}]{item,  }\item[{int}]{timeout\+\_\+ms = {\ttfamily 0} }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
 
 
 
 Pops an element from the queue. 
 
+This function pops an element from the queue, blocking if the queue is empty.
+
+
+\begin{DoxyParams}{Parameters}
+{\em item} & A reference to the variable where the popped element will be stored. \\
+\hline
+{\em timeout\+\_\+ms} & The maximum time in milliseconds to wait if the queue is empty. Default is 0 (no timeout). \\
+\hline
+\end{DoxyParams}
 \begin{DoxyReturn}{Returns}
-The element popped from the queue. 
+True if an element was successfully popped from the queue, false if the pop operation timed out or if the queue is empty.
 \end{DoxyReturn}
 
+\begin{DoxyItemize}
+\item If the current number of elements in the queue is 0, indicating that the queue is empty, the function waits for the write condition to be signaled (indicating that a writer has pushed an element into the queue).
+\item If a timeout (specified by {\ttfamily timeout\+\_\+ms}) is provided and the write condition is not signaled within the given time, the pop operation times out and returns false.
+\item If no timeout is specified ({\ttfamily timeout\+\_\+ms} = 0) and the queue is empty, the function waits indefinitely until the write condition is signaled.
+\item After successfully popping an element from the queue, the function assigns the popped element to the {\ttfamily item} parameter and removes it from the queue.
+\item The function also signals the read condition if the number of elements in the queue becomes (queue\+\_\+capacity -\/ 1). This indicates to potential writers that there is space available in the queue for pushing new elements.
+\end{DoxyItemize}
+
+\begin{DoxyNote}{Note}
+This function should be called by the reader thread. 
+\end{DoxyNote}
+
 \begin{DoxyCode}{0}
-\DoxyCodeLine{133                 \{}
-\DoxyCodeLine{134             T item = 0;}
-\DoxyCodeLine{135             \textcolor{keywordtype}{int} timeout\_ms = 500;}
-\DoxyCodeLine{136             pthread\_mutex\_lock(\&mutex\_lock);}
-\DoxyCodeLine{137 }
-\DoxyCodeLine{138             \textcolor{keywordtype}{bool} success = \textcolor{keyword}{true};}
-\DoxyCodeLine{139             \textcolor{keywordflow}{if} (this-\/>m\_queue.size() == 0) \{}
-\DoxyCodeLine{140                 \textcolor{keywordflow}{if} (timeout\_ms > 0) \{}
-\DoxyCodeLine{141                     \textcolor{keyword}{struct }timespec time\_spec;}
-\DoxyCodeLine{142                     clock\_gettime(CLOCK\_REALTIME, \&time\_spec);}
-\DoxyCodeLine{143                     time\_spec.tv\_sec += timeout\_ms / 1000;}
-\DoxyCodeLine{144                     time\_spec.tv\_nsec += (timeout\_ms \% 1000) * 1000000;}
-\DoxyCodeLine{145                     \textcolor{keywordflow}{if} (time\_spec.tv\_nsec > 1000000000) \{}
-\DoxyCodeLine{146                         time\_spec.tv\_sec += 1;}
-\DoxyCodeLine{147                         time\_spec.tv\_nsec -\/= 1000000000;}
-\DoxyCodeLine{148                     \}}
-\DoxyCodeLine{149 }
-\DoxyCodeLine{150                     \textcolor{keywordflow}{if} (pthread\_cond\_timedwait(\&cond\_write, \&mutex\_lock, \&time\_spec) == \mbox{\hyperlink{bosch-assign_8hpp_a799517031a8334a42807b119bb456c53}{TIME\_OUT}}) \{}
-\DoxyCodeLine{151                         std::cout << \textcolor{stringliteral}{"pop: timed out"} << std::endl;}
-\DoxyCodeLine{152                         success = \textcolor{keyword}{false};}
-\DoxyCodeLine{153                     \}}
-\DoxyCodeLine{154                 \} \textcolor{keywordflow}{else} \{}
-\DoxyCodeLine{155                     std::cout << \textcolor{stringliteral}{"pop: queue empty"} << std::endl;}
-\DoxyCodeLine{156                     pthread\_cond\_wait(\&cond\_write, \&mutex\_lock);}
-\DoxyCodeLine{157                 \}}
-\DoxyCodeLine{158             \}}
-\DoxyCodeLine{159 }
-\DoxyCodeLine{160             \textcolor{keywordflow}{if} (success) \{}
-\DoxyCodeLine{161                 item = this-\/>m\_queue.front();}
-\DoxyCodeLine{162                 this-\/>m\_queue.pop();}
-\DoxyCodeLine{163                 pthread\_cond\_signal(\&cond\_read);}
-\DoxyCodeLine{164             \}}
-\DoxyCodeLine{165 }
-\DoxyCodeLine{166             pthread\_mutex\_unlock(\&mutex\_lock);}
-\DoxyCodeLine{167             std::cout << \textcolor{stringliteral}{"pop: released lock\(\backslash\)n"};}
-\DoxyCodeLine{168 }
-\DoxyCodeLine{169             \textcolor{keywordflow}{return} item;}
-\DoxyCodeLine{170         \}}
+\DoxyCodeLine{161                                               \{}
+\DoxyCodeLine{162             \textcolor{keywordtype}{bool} status = \textcolor{keyword}{true};}
+\DoxyCodeLine{163             pthread\_mutex\_lock(\&mutex\_lock);}
+\DoxyCodeLine{164             \textcolor{keywordflow}{if} (0 == this-\/>\mbox{\hyperlink{classQueue_ad2779bcb60e23b597662c393bf04271c}{count}}()) \{}
+\DoxyCodeLine{165                 std::cout << \textcolor{stringliteral}{"pop: queue is empty\(\backslash\)n"};}
+\DoxyCodeLine{166                 \textcolor{keywordflow}{if} (timeout\_ms > 0) \{}
+\DoxyCodeLine{167                     \textcolor{keyword}{struct }timespec time\_spec;}
+\DoxyCodeLine{168                     clock\_gettime(CLOCK\_REALTIME, \&time\_spec);}
+\DoxyCodeLine{169                     time\_spec.tv\_sec += timeout\_ms / 1000;}
+\DoxyCodeLine{170                     time\_spec.tv\_nsec += (timeout\_ms \% 1000) * 1000000;}
+\DoxyCodeLine{171                     \textcolor{keywordflow}{if} (time\_spec.tv\_nsec > 1000000000) \{}
+\DoxyCodeLine{172                         time\_spec.tv\_sec += 1;}
+\DoxyCodeLine{173                         time\_spec.tv\_nsec -\/= 1000000000;}
+\DoxyCodeLine{174                     \}}
+\DoxyCodeLine{175                     \textcolor{keywordflow}{if} (0 != pthread\_cond\_timedwait(\&cond\_write, \&mutex\_lock, \&time\_spec)) \{}
+\DoxyCodeLine{176                         status = \textcolor{keyword}{false};}
+\DoxyCodeLine{177                         std::cout << \textcolor{stringliteral}{"pop: timeout\(\backslash\)n"};}
+\DoxyCodeLine{178                         }
+\DoxyCodeLine{179                     \}}
+\DoxyCodeLine{180                 \} \textcolor{keywordflow}{else} \{}
+\DoxyCodeLine{181                     pthread\_cond\_wait(\&cond\_write, \&mutex\_lock);}
+\DoxyCodeLine{182                 \}}
+\DoxyCodeLine{183             \}}
+\DoxyCodeLine{184             }
+\DoxyCodeLine{185             \textcolor{keywordflow}{if} (\textcolor{keyword}{true} == status) \{}
+\DoxyCodeLine{186                 item = this-\/>m\_queue.front();}
+\DoxyCodeLine{187                 this-\/>m\_queue.pop();}
+\DoxyCodeLine{188                 std::cout << \textcolor{stringliteral}{"pop: element popped out\(\backslash\)n"};}
+\DoxyCodeLine{189                 \textcolor{keywordflow}{if} (this-\/>\mbox{\hyperlink{classQueue_ad2779bcb60e23b597662c393bf04271c}{count}}() == (this-\/>queue\_capacity -\/ 1)) \{}
+\DoxyCodeLine{190                     pthread\_cond\_signal(\&cond\_read);}
+\DoxyCodeLine{191                     std::cout << \textcolor{stringliteral}{"pop: signalled push\(\backslash\)n"};}
+\DoxyCodeLine{192                 \}}
+\DoxyCodeLine{193             \}}
+\DoxyCodeLine{194 }
+\DoxyCodeLine{195             pthread\_mutex\_unlock(\&mutex\_lock);}
+\DoxyCodeLine{196             std::cout << \textcolor{stringliteral}{"pop: released lock\(\backslash\)n"};}
+\DoxyCodeLine{197 }
+\DoxyCodeLine{198             \textcolor{keywordflow}{return} status;}
+\DoxyCodeLine{199         \}}
 
 \end{DoxyCode}
-\mbox{\Hypertarget{classQueue_a052d7e333791e8efcdf18fa5e504bc92}\label{classQueue_a052d7e333791e8efcdf18fa5e504bc92}} 
+\mbox{\Hypertarget{classQueue_a23ea6a9188e196f40cbb4e15b08c1e53}\label{classQueue_a23ea6a9188e196f40cbb4e15b08c1e53}} 
 \index{Queue$<$ T $>$@{Queue$<$ T $>$}!push@{push}}
 \index{push@{push}!Queue$<$ T $>$@{Queue$<$ T $>$}}
 \doxysubsubsection{\texorpdfstring{push()}{push()}}
 {\footnotesize\ttfamily template$<$typename T $>$ \\
-void \mbox{\hyperlink{classQueue}{Queue}}$<$ T $>$\+::push (\begin{DoxyParamCaption}\item[{T}]{element }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+bool \mbox{\hyperlink{classQueue}{Queue}}$<$ T $>$\+::push (\begin{DoxyParamCaption}\item[{T}]{element,  }\item[{int}]{timeout\+\_\+ms = {\ttfamily 0} }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
 
 
 
 Pushes an element into the queue. 
 
+This function pushes the given element into the queue, blocking if the queue is full.
+
 
 \begin{DoxyParams}{Parameters}
-{\em element} & The element to push into the queue. \\
+{\em element} & The element to be pushed into the queue. \\
+\hline
+{\em timeout\+\_\+ms} & The maximum time in milliseconds to wait if the queue is full. Default is 0 (no timeout). \\
 \hline
 \end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+True if the element was successfully pushed into the queue, false if the push operation timed out or if the maximum number of elements (10) has been reached.
+\end{DoxyReturn}
+
+\begin{DoxyItemize}
+\item If the current number of elements in the queue is equal to the queue\textquotesingle{}s capacity, the function waits for the read condition to be signaled (indicating that a reader has consumed an element from the queue).
+\item If a timeout (specified by {\ttfamily timeout\+\_\+ms}) is provided and the read condition is not signaled within the given time, the push operation times out and returns false.
+\item If no timeout is specified ({\ttfamily timeout\+\_\+ms} = 0) and the queue is full, the function waits indefinitely until the read condition is signaled.
+\item After successfully pushing the element into the queue, the function signals the write condition to notify potential readers that there is data available for consumption.
+\item The function also increments the {\ttfamily write\+\_\+counts} variable to keep track of the number of successful push operations. If {\ttfamily write\+\_\+counts} reaches 10, indicating that the maximum number of elements has been reached, the {\ttfamily is\+\_\+done} flag is set to true, and subsequent push operations will return false.
+\end{DoxyItemize}
+
+\begin{DoxyNote}{Note}
+This function should be called by the writer thread. 
+\end{DoxyNote}
 
 \begin{DoxyCode}{0}
-\DoxyCodeLine{84                              \{}
-\DoxyCodeLine{85             \textcolor{keywordtype}{int} timeout\_ms = 500;}
-\DoxyCodeLine{86             write\_counts++;}
-\DoxyCodeLine{87             \textcolor{keywordflow}{if} (write\_counts >= 10) \{}
-\DoxyCodeLine{88                 this-\/>\mbox{\hyperlink{classQueue_a03312b60344e10adc76501434b2852f6}{set\_is\_done}}();}
-\DoxyCodeLine{89             \}}
-\DoxyCodeLine{90 }
-\DoxyCodeLine{91             pthread\_mutex\_lock(\&mutex\_lock);}
-\DoxyCodeLine{92             std::cout << \textcolor{stringliteral}{"push: locked"} << std::endl;}
-\DoxyCodeLine{93             \textcolor{keywordtype}{bool} success = \textcolor{keyword}{true};}
-\DoxyCodeLine{94             \textcolor{keywordflow}{if} (\mbox{\hyperlink{classQueue_ad2779bcb60e23b597662c393bf04271c}{count}}() >= \mbox{\hyperlink{classQueue_a0984ba1a6d1e8de2275d7b5f89bb12fa}{queue\_size}}()) \{}
-\DoxyCodeLine{95                 \textcolor{keywordflow}{if} (timeout\_ms > 0) \{}
-\DoxyCodeLine{96                     \textcolor{keyword}{struct }timespec time\_spec;}
-\DoxyCodeLine{97                     clock\_gettime(CLOCK\_REALTIME, \&time\_spec);}
-\DoxyCodeLine{98                     time\_spec.tv\_sec += timeout\_ms / 1000;}
-\DoxyCodeLine{99                     time\_spec.tv\_nsec += (timeout\_ms \% 1000) * 1000000;}
-\DoxyCodeLine{100                     \textcolor{keywordflow}{if} (time\_spec.tv\_nsec > 1000000000) \{}
-\DoxyCodeLine{101                         time\_spec.tv\_sec += 1;}
-\DoxyCodeLine{102                         time\_spec.tv\_nsec -\/= 1000000000;}
-\DoxyCodeLine{103                     \}}
-\DoxyCodeLine{104 }
-\DoxyCodeLine{105                     \textcolor{keywordflow}{if} (pthread\_cond\_timedwait(\&cond\_read, \&mutex\_lock, \&time\_spec) == \mbox{\hyperlink{bosch-assign_8hpp_a799517031a8334a42807b119bb456c53}{TIME\_OUT}}) \{}
-\DoxyCodeLine{106                         std::cout << \textcolor{stringliteral}{"push: timed out"} << std::endl;}
-\DoxyCodeLine{107                         success = \textcolor{keyword}{false};}
-\DoxyCodeLine{108                     \}}
-\DoxyCodeLine{109                 \} \textcolor{keywordflow}{else} \{}
-\DoxyCodeLine{110                     std::cout << \textcolor{stringliteral}{"push: queue full"} << std::endl;}
-\DoxyCodeLine{111                     pthread\_cond\_wait(\&cond\_read, \&mutex\_lock);}
-\DoxyCodeLine{112                 \}}
-\DoxyCodeLine{113             \}}
-\DoxyCodeLine{114 }
-\DoxyCodeLine{115             \textcolor{keywordflow}{if} (success) \{}
-\DoxyCodeLine{116                 this-\/>m\_queue.push(element);}
-\DoxyCodeLine{117                 std::cout << \textcolor{stringliteral}{"push: pushed "} << element << std::endl;}
-\DoxyCodeLine{118                 \textcolor{keywordflow}{if} (1 == \mbox{\hyperlink{classQueue_ad2779bcb60e23b597662c393bf04271c}{count}}()) \{}
-\DoxyCodeLine{119                     pthread\_cond\_signal(\&cond\_write);}
-\DoxyCodeLine{120                     std::cout << \textcolor{stringliteral}{"push: signaled to pop"} << std::endl;}
-\DoxyCodeLine{121                 \}}
-\DoxyCodeLine{122             \}}
-\DoxyCodeLine{123 }
-\DoxyCodeLine{124             pthread\_mutex\_unlock(\&mutex\_lock);}
-\DoxyCodeLine{125             std::cout << \textcolor{stringliteral}{"push: released lock"} << std::endl;}
-\DoxyCodeLine{126         \}}
+\DoxyCodeLine{97                                                  \{}
+\DoxyCodeLine{98             \textcolor{keywordtype}{bool} status = \textcolor{keyword}{true};}
+\DoxyCodeLine{99             write\_counts++;}
+\DoxyCodeLine{100             \textcolor{keywordflow}{if} (10 < write\_counts) \{}
+\DoxyCodeLine{101                 this-\/>is\_done = \textcolor{keyword}{true};}
+\DoxyCodeLine{102                 status = \textcolor{keyword}{false};}
+\DoxyCodeLine{103                 \textcolor{keywordflow}{return} status;}
+\DoxyCodeLine{104             \} }
+\DoxyCodeLine{105             }
+\DoxyCodeLine{106             pthread\_mutex\_lock(\&mutex\_lock);}
+\DoxyCodeLine{107             std::cout << \textcolor{stringliteral}{"push: acquired lock\(\backslash\)n"};}
+\DoxyCodeLine{108             \textcolor{keywordflow}{if} (this-\/>\mbox{\hyperlink{classQueue_ad2779bcb60e23b597662c393bf04271c}{count}}() == this-\/>\mbox{\hyperlink{classQueue_a0984ba1a6d1e8de2275d7b5f89bb12fa}{queue\_size}}()) \{}
+\DoxyCodeLine{109                 std::cout << \textcolor{stringliteral}{"push: queue is full\(\backslash\)n"};}
+\DoxyCodeLine{110                 \textcolor{keywordflow}{if} (timeout\_ms > 0) \{}
+\DoxyCodeLine{111                     \textcolor{keyword}{struct }timespec time\_spec;}
+\DoxyCodeLine{112                     clock\_gettime(CLOCK\_REALTIME, \&time\_spec);}
+\DoxyCodeLine{113                     time\_spec.tv\_sec += timeout\_ms / 1000;}
+\DoxyCodeLine{114                     time\_spec.tv\_nsec += (timeout\_ms \% 1000) * 1000000;}
+\DoxyCodeLine{115                     \textcolor{keywordflow}{if} (time\_spec.tv\_nsec > 1000000000) \{}
+\DoxyCodeLine{116                         time\_spec.tv\_sec += 1;}
+\DoxyCodeLine{117                         time\_spec.tv\_nsec -\/= 1000000000;}
+\DoxyCodeLine{118                     \}}
+\DoxyCodeLine{119                     \textcolor{keywordflow}{if} (pthread\_cond\_timedwait(\&cond\_read, \&mutex\_lock, \&time\_spec) == ETIMEDOUT) \{}
+\DoxyCodeLine{120                         status = \textcolor{keyword}{false};}
+\DoxyCodeLine{121                         std::cout << \textcolor{stringliteral}{"push: timeout\(\backslash\)n"};}
+\DoxyCodeLine{122                     \}}
+\DoxyCodeLine{123                 \} \textcolor{keywordflow}{else} \{}
+\DoxyCodeLine{124                     pthread\_cond\_wait(\&cond\_read, \&mutex\_lock);}
+\DoxyCodeLine{125                 \}}
+\DoxyCodeLine{126             \} }
+\DoxyCodeLine{127             }
+\DoxyCodeLine{128             \textcolor{keywordflow}{if} (status == \textcolor{keyword}{true}) \{}
+\DoxyCodeLine{129                 this-\/>m\_queue.push(element);}
+\DoxyCodeLine{130                 std::cout << \textcolor{stringliteral}{"push: pushed "} << element << \textcolor{stringliteral}{" into the queue\(\backslash\)n"};}
+\DoxyCodeLine{131                 \textcolor{keywordflow}{if} (1 == this-\/>\mbox{\hyperlink{classQueue_ad2779bcb60e23b597662c393bf04271c}{count}}()) \{}
+\DoxyCodeLine{132                     pthread\_cond\_signal(\&cond\_write);}
+\DoxyCodeLine{133                     std::cout << \textcolor{stringliteral}{"push: signaled to pop\(\backslash\)n"};}
+\DoxyCodeLine{134                 \}}
+\DoxyCodeLine{135             \}}
+\DoxyCodeLine{136 }
+\DoxyCodeLine{137             pthread\_mutex\_unlock(\&mutex\_lock);}
+\DoxyCodeLine{138             std::cout << \textcolor{stringliteral}{"push: released lock\(\backslash\)n"};}
+\DoxyCodeLine{139 }
+\DoxyCodeLine{140             \textcolor{keywordflow}{return} status;}
+\DoxyCodeLine{141         \}}
 
 \end{DoxyCode}
 \mbox{\Hypertarget{classQueue_a0984ba1a6d1e8de2275d7b5f89bb12fa}\label{classQueue_a0984ba1a6d1e8de2275d7b5f89bb12fa}} 

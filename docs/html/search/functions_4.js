@@ -1,5 +1,5 @@
 var searchData=
 [
-  ['pop_35',['pop',['../classQueue.html#abeee018138cbb5226e5352a5788e23bd',1,'Queue']]],
-  ['push_36',['push',['../classQueue.html#a052d7e333791e8efcdf18fa5e504bc92',1,'Queue']]]
+  ['pop_71',['pop',['../classQueue.html#a4586ef0e5b058949810ce87487715492',1,'Queue']]],
+  ['push_72',['push',['../classQueue.html#a23ea6a9188e196f40cbb4e15b08c1e53',1,'Queue']]]
 ];

@@ -1,0 +1,73 @@
+\hypertarget{classQueueTestDelay}{}\doxysection{Queue\+Test\+Delay Class Reference}
+\label{classQueueTestDelay}\index{QueueTestDelay@{QueueTestDelay}}
+
+
+Fixture for testing the \mbox{\hyperlink{classQueue}{Queue}} class with delay functionality.  
+
+
+
+
+Inheritance diagram for Queue\+Test\+Delay\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=176pt]{classQueueTestDelay__inherit__graph}
+\end{center}
+\end{figure}
+
+
+Collaboration diagram for Queue\+Test\+Delay\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=176pt]{classQueueTestDelay__coll__graph}
+\end{center}
+\end{figure}
+\doxysubsection*{Protected Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+void \mbox{\hyperlink{classQueueTestDelay_a6eae5f081358d856a2c7c1863e2e1a40}{Set\+Up}} () override
+\item 
+void \mbox{\hyperlink{classQueueTestDelay_ac01a18c6bc61d7f84841796be568b6c4}{Tear\+Down}} () override
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+Fixture for testing the \mbox{\hyperlink{classQueue}{Queue}} class with delay functionality. 
+
+This fixture sets up the \mbox{\hyperlink{classQueue}{Queue}} object before running each test case and cleans it up after each test case. 
+
+\doxysubsection{Member Function Documentation}
+\mbox{\Hypertarget{classQueueTestDelay_a6eae5f081358d856a2c7c1863e2e1a40}\label{classQueueTestDelay_a6eae5f081358d856a2c7c1863e2e1a40}} 
+\index{QueueTestDelay@{QueueTestDelay}!SetUp@{SetUp}}
+\index{SetUp@{SetUp}!QueueTestDelay@{QueueTestDelay}}
+\doxysubsubsection{\texorpdfstring{SetUp()}{SetUp()}}
+{\footnotesize\ttfamily void Queue\+Test\+Delay\+::\+Set\+Up (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [override]}, {\ttfamily [protected]}}
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{16                           \{}
+\DoxyCodeLine{17         \mbox{\hyperlink{tests_8cpp_a6ceebe9bd35a091156e386f63b578109}{queue}} = \textcolor{keyword}{new} \mbox{\hyperlink{classQueue}{Queue<int>}}(2);}
+\DoxyCodeLine{18     \}}
+
+\end{DoxyCode}
+\mbox{\Hypertarget{classQueueTestDelay_ac01a18c6bc61d7f84841796be568b6c4}\label{classQueueTestDelay_ac01a18c6bc61d7f84841796be568b6c4}} 
+\index{QueueTestDelay@{QueueTestDelay}!TearDown@{TearDown}}
+\index{TearDown@{TearDown}!QueueTestDelay@{QueueTestDelay}}
+\doxysubsubsection{\texorpdfstring{TearDown()}{TearDown()}}
+{\footnotesize\ttfamily void Queue\+Test\+Delay\+::\+Tear\+Down (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [override]}, {\ttfamily [protected]}}
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{20                              \{}
+\DoxyCodeLine{21         \textcolor{keyword}{delete} \mbox{\hyperlink{tests_8cpp_a6ceebe9bd35a091156e386f63b578109}{queue}};}
+\DoxyCodeLine{22     \}}
+
+\end{DoxyCode}
+
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+/home/zeishan/\+Documents/jun-\/19-\/bosch/bosch-\/assign/test/\mbox{\hyperlink{tests_8cpp}{tests.\+cpp}}\end{DoxyCompactItemize}

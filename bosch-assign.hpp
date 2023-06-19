@@ -1,7 +1,7 @@
 #include <iostream>
 #include <queue>
 #include <pthread.h>
-#define TIME_OUT    110
+
 static int w_ret = 0, r_ret = 0;
 
 /**
@@ -79,19 +79,34 @@ class Queue {
         /**
          * @brief Pushes an element into the queue.
          *
-         * @param element The element to push into the queue.
+         * This function pushes the given element into the queue, blocking if the queue is full.
+         *
+         * @param element The element to be pushed into the queue.
+         * @param timeout_ms The maximum time in milliseconds to wait if the queue is full. Default is 0 (no timeout).
+         * @return True if the element was successfully pushed into the queue, false if the push operation timed out or if the maximum number of elements (10) has been reached.
+         *
+         * @details
+         * - If the current number of elements in the queue is equal to the queue's capacity, the function waits for the read condition to be signaled (indicating that a reader has consumed an element from the queue).
+         * - If a timeout (specified by `timeout_ms`) is provided and the read condition is not signaled within the given time, the push operation times out and returns false.
+         * - If no timeout is specified (`timeout_ms` = 0) and the queue is full, the function waits indefinitely until the read condition is signaled.
+         * - After successfully pushing the element into the queue, the function signals the write condition to notify potential readers that there is data available for consumption.
+         * - The function also increments the `write_counts` variable to keep track of the number of successful push operations. If `write_counts` reaches 10, indicating that the maximum number of elements has been reached, the `is_done` flag is set to true, and subsequent push operations will return false.
+         *
+         * @note This function should be called by the writer thread.
          */
-        void push(T element) {
-            int timeout_ms = 500;
+        bool push(T element, int timeout_ms = 0) {
+            bool status = true;
             write_counts++;
-            if (write_counts >= 10) {
-                this->set_is_done();
-            }
-
+            if (10 < write_counts) {
+                this->is_done = true;
+                status = false;
+                return status;
+            } 
+            
             pthread_mutex_lock(&mutex_lock);
-            std::cout << "push: locked" << std::endl;
-            bool success = true;
-            if (count() >= queue_size()) {
+            std::cout << "push: acquired lock\n";
+            if (this->count() == this->queue_size()) {
+                std::cout << "push: queue is full\n";
                 if (timeout_ms > 0) {
                     struct timespec time_spec;
                     clock_gettime(CLOCK_REALTIME, &time_spec);
@@ -101,42 +116,53 @@ class Queue {
                         time_spec.tv_sec += 1;
                         time_spec.tv_nsec -= 1000000000;
                     }
-
-                    if (pthread_cond_timedwait(&cond_read, &mutex_lock, &time_spec) == TIME_OUT) {
-                        std::cout << "push: timed out" << std::endl;
-                        success = false;
+                    if (pthread_cond_timedwait(&cond_read, &mutex_lock, &time_spec) == ETIMEDOUT) {
+                        status = false;
+                        std::cout << "push: timeout\n";
                     }
                 } else {
-                    std::cout << "push: queue full" << std::endl;
                     pthread_cond_wait(&cond_read, &mutex_lock);
                 }
-            }
-
-            if (success) {
+            } 
+            
+            if (status == true) {
                 this->m_queue.push(element);
-                std::cout << "push: pushed " << element << std::endl;
-                if (1 == count()) {
+                std::cout << "push: pushed " << element << " into the queue\n";
+                if (1 == this->count()) {
                     pthread_cond_signal(&cond_write);
-                    std::cout << "push: signaled to pop" << std::endl;
+                    std::cout << "push: signaled to pop\n";
                 }
             }
 
             pthread_mutex_unlock(&mutex_lock);
-            std::cout << "push: released lock" << std::endl;
+            std::cout << "push: released lock\n";
+
+            return status;
         }
 
         /**
          * @brief Pops an element from the queue.
          *
-         * @return The element popped from the queue.
+         * This function pops an element from the queue, blocking if the queue is empty.
+         *
+         * @param item A reference to the variable where the popped element will be stored.
+         * @param timeout_ms The maximum time in milliseconds to wait if the queue is empty. Default is 0 (no timeout).
+         * @return True if an element was successfully popped from the queue, false if the pop operation timed out or if the queue is empty.
+         *
+         * @details
+         * - If the current number of elements in the queue is 0, indicating that the queue is empty, the function waits for the write condition to be signaled (indicating that a writer has pushed an element into the queue).
+         * - If a timeout (specified by `timeout_ms`) is provided and the write condition is not signaled within the given time, the pop operation times out and returns false.
+         * - If no timeout is specified (`timeout_ms` = 0) and the queue is empty, the function waits indefinitely until the write condition is signaled.
+         * - After successfully popping an element from the queue, the function assigns the popped element to the `item` parameter and removes it from the queue.
+         * - The function also signals the read condition if the number of elements in the queue becomes (queue_capacity - 1). This indicates to potential writers that there is space available in the queue for pushing new elements.
+         *
+         * @note This function should be called by the reader thread.
          */
-        T pop() {
-            T item = 0;
-            int timeout_ms = 500;
+        bool pop(T& item, int timeout_ms = 0) {
+            bool status = true;
             pthread_mutex_lock(&mutex_lock);
-
-            bool success = true;
-            if (this->m_queue.size() == 0) {
+            if (0 == this->count()) {
+                std::cout << "pop: queue is empty\n";
                 if (timeout_ms > 0) {
                     struct timespec time_spec;
                     clock_gettime(CLOCK_REALTIME, &time_spec);
@@ -146,27 +172,30 @@ class Queue {
                         time_spec.tv_sec += 1;
                         time_spec.tv_nsec -= 1000000000;
                     }
-
-                    if (pthread_cond_timedwait(&cond_write, &mutex_lock, &time_spec) == TIME_OUT) {
-                        std::cout << "pop: timed out" << std::endl;
-                        success = false;
+                    if (0 != pthread_cond_timedwait(&cond_write, &mutex_lock, &time_spec)) {
+                        status = false;
+                        std::cout << "pop: timeout\n";
+                        
                     }
                 } else {
-                    std::cout << "pop: queue empty" << std::endl;
                     pthread_cond_wait(&cond_write, &mutex_lock);
                 }
             }
-
-            if (success) {
+            
+            if (true == status) {
                 item = this->m_queue.front();
                 this->m_queue.pop();
-                pthread_cond_signal(&cond_read);
+                std::cout << "pop: element popped out\n";
+                if (this->count() == (this->queue_capacity - 1)) {
+                    pthread_cond_signal(&cond_read);
+                    std::cout << "pop: signalled push\n";
+                }
             }
 
             pthread_mutex_unlock(&mutex_lock);
             std::cout << "pop: released lock\n";
 
-            return item;
+            return status;
         }
 
 };
@@ -182,13 +211,14 @@ void *writer(void *arg) {
         return nullptr;
     }
 
-    Queue<int> *my_queue = static_cast<Queue<int>*>(arg);
+    Queue<int> *m_queue = static_cast<Queue<int>*>(arg);
     int count = 0;
     while(true) {
         count++;
-        std::cout << "writer: queue count is " << my_queue->count() << std::endl;
-        my_queue->push(count);
-        if (count >= 10) {
+        std::cout << "writer: queue count is " << m_queue->count() << std::endl;
+        // m_queue->push(count);
+        m_queue->push(count, 500);
+        if (m_queue->get_is_done()) {
             w_ret = 100;
             pthread_exit(&w_ret);
         }
@@ -206,12 +236,15 @@ void *reader(void *arg) {
         return nullptr;
     }
 
-    Queue<int> *my_queue = static_cast<Queue<int>*>(arg);
+    Queue<int> *m_queue = static_cast<Queue<int>*>(arg);
+    int item = 0;
     while(true) {
-        std::cout << my_queue->pop() << std::endl;
-        if (my_queue->get_is_done()) {
-            std::cout << "reader: queue count is " << my_queue->count() << std::endl;
-            if (my_queue->count() == 0) {
+        // m_queue->pop(item);
+        m_queue->pop(item, 500);
+        std::cout << "reader: popped " << item << std::endl;
+        if (m_queue->get_is_done()) {
+            std::cout << "reader: queue count is " << m_queue->count() << std::endl;
+            if (m_queue->count() == 0) {
                 r_ret = 200;
                 pthread_exit(&r_ret);
             }
