@@ -20,11 +20,13 @@ int main() {
 	check = pthread_create(&threads[0], NULL, writer, (void*)q);
 	if (check) {
 		fprintf(stderr, "unable to create the thread\n");
+        return -1;
 	}
 
 	check = pthread_create(&threads[1], NULL, reader, (void*)q);
 	if (check) {
 		fprintf(stderr, "unable to create the thread\n");
+        return -1;
 	}
 
     pthread_join(threads[0], (void**)&(ptr[0]));
