@@ -1,5 +1,8 @@
 #include "bosch-assign.hpp"
 
+#define WRITER_THREAD   0
+#define READER_THREAD   1
+
 /**
  * @brief The main function.
  *
@@ -11,30 +14,30 @@
  * @return 0 on successful execution.
  */
 int main() {
-    Queue<int> *q = new Queue<int>(2);
-    std::cout << "queue capacity: " << q->queue_size() << std::endl;
+    Queue<int> *thread_safe_queue = new Queue<int>(2);
+    std::cout << "queue capacity: " << thread_safe_queue->queue_size() << std::endl;
     pthread_t threads[2];
 	int check = 0;
     int *ptr[2];
 
-	check = pthread_create(&threads[0], NULL, writer, (void*)q);
+	check = pthread_create(&threads[WRITER_THREAD], NULL, writer, (void*)thread_safe_queue);
 	if (check) {
 		fprintf(stderr, "unable to create the thread\n");
         return -1;
 	}
 
-	check = pthread_create(&threads[1], NULL, reader, (void*)q);
+	check = pthread_create(&threads[READER_THREAD], NULL, reader, (void*)thread_safe_queue);
 	if (check) {
 		fprintf(stderr, "unable to create the thread\n");
         return -1;
 	}
 
-    pthread_join(threads[0], (void**)&(ptr[0]));
-    pthread_join(threads[1], (void**)&(ptr[1]));
+    pthread_join(threads[WRITER_THREAD], (void**)&(ptr[WRITER_THREAD]));
+    pthread_join(threads[READER_THREAD], (void**)&(ptr[READER_THREAD]));
 
-    std::cout << "writer thread returned: " << *ptr[0] << std::endl;
-    std::cout << "reader thread returned: " << *ptr[1] << std::endl;
-    delete q;
+    std::cout << "writer thread returned: " << *ptr[WRITER_THREAD] << std::endl;
+    std::cout << "reader thread returned: " << *ptr[READER_THREAD] << std::endl;
+    delete thread_safe_queue;
 
     return 0;
 }

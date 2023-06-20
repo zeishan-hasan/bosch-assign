@@ -2,6 +2,11 @@
 #include <queue>
 #include <pthread.h>
 
+#define TIMEOUT     500
+#define R_RET       200
+#define W_RET       100
+#define W_LIMIT     10
+
 static int w_ret = 0, r_ret = 0;
 
 /**
@@ -97,7 +102,7 @@ class Queue {
         bool push(T element, int timeout_ms = 0) {
             bool status = true;
             write_counts++;
-            if (10 < write_counts) {
+            if (W_LIMIT < write_counts) {
                 this->is_done = true;
                 status = false;
                 return status;
@@ -217,9 +222,9 @@ void *writer(void *arg) {
         count++;
         std::cout << "writer: queue count is " << m_queue->count() << std::endl;
         // m_queue->push(count);
-        m_queue->push(count, 500);
+        m_queue->push(count, TIMEOUT);
         if (m_queue->get_is_done()) {
-            w_ret = 100;
+            w_ret = W_RET;
             pthread_exit(&w_ret);
         }
     }
@@ -240,12 +245,12 @@ void *reader(void *arg) {
     int item = 0;
     while(true) {
         // m_queue->pop(item);
-        m_queue->pop(item, 500);
+        m_queue->pop(item, TIMEOUT);
         std::cout << "reader: popped " << item << std::endl;
         if (m_queue->get_is_done()) {
             std::cout << "reader: queue count is " << m_queue->count() << std::endl;
             if (m_queue->count() == 0) {
-                r_ret = 200;
+                r_ret = R_RET;
                 pthread_exit(&r_ret);
             }
         }

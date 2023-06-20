@@ -156,6 +156,8 @@ compile_commands.json
 CTestTestfile.cmake
 _deps
 
+googletest/
+quick-run/
 ./build
 
 [Bb][Uu][Ii][Ll][Dd]
